@@ -12,6 +12,7 @@ import {
   insertAuthorization,
   getOptWindow,
 } from '../data/queries';
+import { askAgent } from '../mcp/agent';
 
 export function registerRoutes(fastify: FastifyInstance): void {
 
@@ -190,5 +191,15 @@ export function registerRoutes(fastify: FastifyInstance): void {
     if (!filename) return reply.status(404).send({ error: `Unknown topic: ${topic}` });
     const rules = loadRuleFile(filename);
     return reply.send(rules);
+  });
+
+  // POST /ask — ask the compliance agent a question
+  fastify.post('/ask', async (request, reply) => {
+    const { question } = request.body as { question: string };
+    if (!question || typeof question !== 'string') {
+      return reply.status(400).send({ error: 'question is required' });
+    }
+    const answer = await askAgent(question);
+    return reply.send({ answer });
   });
 }
