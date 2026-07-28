@@ -51,7 +51,7 @@ export function computeUnemploymentDays(
   // If optWindow.end is absent, use today's date
   const windowEnd = optWindow.end ? toUtcDate(optWindow.end) : (() => {
     const today = new Date();
-    return new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()));
+    return new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()));
   })();
 
   const totalWindowDays = daysBetweenInclusive(windowStart, windowEnd);

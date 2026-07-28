@@ -16,7 +16,7 @@ function toUtcDate(iso: string): Date {
  */
 function todayIso(): string {
   const today = new Date();
-  return new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()))
+  return new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()))
     .toISOString()
     .slice(0, 10);
 }

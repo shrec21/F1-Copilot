@@ -66,7 +66,7 @@ export function checkCptEligibilityImpact(
 
     const end = role.period.end ?? (() => {
       const today = new Date();
-      return today.toISOString().slice(0, 10);
+      return new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate())).toISOString().slice(0, 10);
     })();
 
     const months = monthsInRange(role.period.start, end);

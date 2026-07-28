@@ -388,4 +388,19 @@ describe('checkDsTransitionStatus', () => {
     );
     expect(result.graceperiodEndDate).toBe('2028-03-01');
   });
+
+  it('admission before effective date, isCurrentlyDs false → regime fixed-date', () => {
+    const result = checkDsTransitionStatus(
+      '2026-05-01',           // before Sept 15, 2026
+      '2026-12-15',
+      false,                  // NOT currently D/S
+      EFFECTIVE_DATE,
+      PENDING_DS_DEADLINE,
+      GRACE_DAYS,
+      RULE_ID,
+      DISCLAIMER,
+    );
+    expect(result.regime).toBe('fixed-date');
+    expect(result.transitionDeadline).toBeNull();
+  });
 });

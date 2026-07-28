@@ -61,10 +61,21 @@ export function checkDsTransitionStatus(
     };
   }
 
-  // Else: regime = 'D/S' if isCurrentlyDs
+  // Else: only D/S if the student is currently admitted D/S.
+  // A pre-transition student not on D/S already has a fixed-date I-94 expiry.
+  if (!isCurrentlyDs) {
+    return {
+      regime: 'fixed-date',
+      transitionDeadline: null,
+      graceperiodEndDate,
+      appliedRuleId,
+      disclaimer,
+    };
+  }
+
   return {
     regime: 'D/S',
-    transitionDeadline: isCurrentlyDs ? pendingDsDeadline : null,
+    transitionDeadline: pendingDsDeadline,
     graceperiodEndDate,
     appliedRuleId,
     disclaimer,
