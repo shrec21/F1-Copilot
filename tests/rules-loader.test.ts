@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { loadRuleFile } from '../src/rules/loader';
+import { parse } from 'yaml';
+import { loadRuleFile, validateRuleFile } from '../src/rules/loader';
+import type { RuleFile } from '../src/rules/types';
 
 // ─── Tests using real YAML files ─────────────────────────────────────────────
 
@@ -59,34 +61,17 @@ describe('loadRuleFile — real YAML files', () => {
   });
 });
 
-// ─── Error-path tests using the yaml parser directly ─────────────────────────
-// Instead of mocking fs (which gets hoisted and breaks real-file tests),
-// we test the validation logic by calling the parser and validator directly.
+// ─── Error-path tests via exported validateRuleFile ───────────────────────────
+// We parse inline YAML strings and pass the result directly to validateRuleFile,
+// avoiding any need to mock fs (which Vitest hoists and breaks real-file tests).
 
-import { parse } from 'yaml';
-import type { RuleFile } from '../src/rules/types';
-
-/**
- * Thin validator extracted from loader logic so we can test it without I/O.
- * This mirrors the exact checks in loadRuleFile.
- */
-function validateRuleFile(filename: string, data: unknown): RuleFile {
-  const REQUIRED_FIELDS = ['topic', 'effective_date', 'source_url', 'disclaimer', 'rules'] as const;
-  const d = data as Record<string, unknown>;
-  for (const field of REQUIRED_FIELDS) {
-    if (d[field] === undefined || d[field] === null) {
-      throw new Error(`Rule file "${filename}" missing required field: ${field}`);
-    }
-  }
-  if (!Array.isArray(d['rules']) || (d['rules'] as unknown[]).length === 0) {
-    throw new Error(`Rule file "${filename}" must have at least one rule entry`);
-  }
-  return d as unknown as RuleFile;
+function parseAs(yaml: string): RuleFile {
+  return parse(yaml) as RuleFile;
 }
 
-describe('loadRuleFile — validation logic (error paths)', () => {
+describe('validateRuleFile — error paths', () => {
   it('throws when disclaimer is missing', () => {
-    const data = parse(`
+    const data = parseAs(`
 topic: test-topic
 effective_date: "2024-01-01"
 source_url: "https://example.com"
@@ -95,13 +80,28 @@ rules:
     summary: A rule without disclaimer field
     citation: "Test citation"
 `);
-    expect(() => validateRuleFile('missing-disclaimer.yaml', data)).toThrow(
+    expect(() => validateRuleFile(data, 'missing-disclaimer.yaml')).toThrow(
       'missing required field: disclaimer'
     );
   });
 
+  it('throws when effective_date is missing', () => {
+    const data = parseAs(`
+topic: test-topic
+source_url: "https://example.com"
+disclaimer: "A disclaimer"
+rules:
+  - id: some-rule
+    summary: A rule
+    citation: "Test citation"
+`);
+    expect(() => validateRuleFile(data, 'missing-effective-date.yaml')).toThrow(
+      'missing required field: effective_date'
+    );
+  });
+
   it('throws when source_url is missing', () => {
-    const data = parse(`
+    const data = parseAs(`
 topic: test-topic
 effective_date: "2024-01-01"
 disclaimer: "A disclaimer"
@@ -110,36 +110,36 @@ rules:
     summary: A rule
     citation: "Test citation"
 `);
-    expect(() => validateRuleFile('missing-source.yaml', data)).toThrow(
+    expect(() => validateRuleFile(data, 'missing-source.yaml')).toThrow(
       'missing required field: source_url'
     );
   });
 
+  it('throws when topic is missing', () => {
+    const data = parseAs(`
+effective_date: "2024-01-01"
+source_url: "https://example.com"
+disclaimer: "A disclaimer"
+rules:
+  - id: some-rule
+    summary: A rule
+    citation: "Test citation"
+`);
+    expect(() => validateRuleFile(data, 'missing-topic.yaml')).toThrow(
+      'missing required field: topic'
+    );
+  });
+
   it('throws when rules array is empty', () => {
-    const data = parse(`
+    const data = parseAs(`
 topic: test-topic
 effective_date: "2024-01-01"
 source_url: "https://example.com"
 disclaimer: "A disclaimer"
 rules: []
 `);
-    expect(() => validateRuleFile('empty-rules.yaml', data)).toThrow(
+    expect(() => validateRuleFile(data, 'empty-rules.yaml')).toThrow(
       'must have at least one rule entry'
-    );
-  });
-
-  it('throws when topic is missing', () => {
-    const data = parse(`
-effective_date: "2024-01-01"
-source_url: "https://example.com"
-disclaimer: "A disclaimer"
-rules:
-  - id: some-rule
-    summary: A rule
-    citation: "Test citation"
-`);
-    expect(() => validateRuleFile('missing-topic.yaml', data)).toThrow(
-      'missing required field: topic'
     );
   });
 });
