@@ -1,4 +1,5 @@
 {
+  "_comment": "This file exists because tsconfig.json includes tests/**/* for IDE support and type-checking, but sets rootDir to src, which causes tsc to error when tests/ is outside rootDir. This build config extends tsconfig.json and restricts include to src/**/* only so that `tsc -p tsconfig.build.json` (the build script) compiles cleanly without touching test files.",
   "extends": "./tsconfig.json",
   "include": ["src/**/*"]
 }
