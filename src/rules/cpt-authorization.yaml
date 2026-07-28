@@ -8,8 +8,6 @@ disclaimer: >
 rules:
   - id: cpt-full-time-definition
     summary: Full-time CPT is CPT authorization for 20 or more hours per week.
-    threshold: 20
-    unit: days
     citation: "8 CFR § 214.2(f)(10)(i)"
   - id: cpt-opt-eligibility-impact
     summary: A student who has engaged in 12 or more months of full-time CPT is ineligible for post-completion OPT.
