@@ -4,6 +4,7 @@ export interface RuleEntry {
   threshold?: number;   // numeric limit if applicable (days, months)
   unit?: 'days' | 'months';
   citation: string;     // e.g. "8 CFR § 214.2(f)(10)(ii)"
+  deadline?: string;    // ISO 8601 date for rules that carry a specific deadline
 }
 
 export interface RuleFile {

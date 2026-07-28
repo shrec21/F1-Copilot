@@ -12,6 +12,7 @@ rules:
     citation: "DHS Final Rule, 90 FR 5854 (Jan. 17, 2025); effective Sept. 15, 2026"
   - id: pending-ds-filing-deadline
     summary: F-1 students currently in D/S status who wish to remain under D/S must file an application with USCIS by March 18, 2027, or they will be subject to the fixed-period regime.
+    deadline: "2027-03-18"
     citation: "DHS Final Rule, 90 FR 5854 (Jan. 17, 2025), transition provisions"
   - id: ds-grace-period
     summary: Under the fixed-period regime, students are granted a 60-day grace period after the program end date to depart, transfer, or change status.
