@@ -1,1 +1,21 @@
-# placeholder — filled in Task 2
+topic: cpt-authorization
+effective_date: "2024-04-08"
+source_url: "https://www.ecfr.gov/current/title-8/chapter-I/subchapter-B/part-214/section-214.2#p-214.2(f)(10)(i)"
+disclaimer: >
+  This tool tracks CPT authorization periods you enter and flags potential
+  eligibility impacts. It does not render a legal determination about your
+  CPT or OPT eligibility. Consult your DSO before accepting any CPT offer.
+rules:
+  - id: cpt-full-time-definition
+    summary: Full-time CPT is CPT authorization for 20 or more hours per week.
+    threshold: 20
+    unit: days
+    citation: "8 CFR § 214.2(f)(10)(i)"
+  - id: cpt-opt-eligibility-impact
+    summary: A student who has engaged in 12 or more months of full-time CPT is ineligible for post-completion OPT.
+    threshold: 12
+    unit: months
+    citation: "8 CFR § 214.2(f)(10)(i)"
+  - id: cpt-per-employer-scoping
+    summary: CPT authorization is issued per employer. Working for an employer not named on the CPT authorization is a status violation.
+    citation: "8 CFR § 214.2(f)(10)(i); Form I-20 CPT endorsement"

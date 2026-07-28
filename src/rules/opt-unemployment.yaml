@@ -1,1 +1,21 @@
-# placeholder — filled in Task 2
+topic: opt-unemployment
+effective_date: "2024-04-08"
+source_url: "https://www.ecfr.gov/current/title-8/chapter-I/subchapter-B/part-214/section-214.2#p-214.2(f)(10)(ii)"
+disclaimer: >
+  This tool tracks unemployment days based on the employment periods you enter.
+  It does not determine your actual compliance status. Consult your DSO or an
+  immigration attorney before making any employment or status decisions.
+rules:
+  - id: standard-opt-unemployment-cap
+    summary: Students on standard post-completion OPT may not accumulate more than 90 days of unemployment during the OPT period.
+    threshold: 90
+    unit: days
+    citation: "8 CFR § 214.2(f)(10)(ii)(C)"
+  - id: stem-opt-unemployment-cap
+    summary: Students on a 24-month STEM OPT extension may not accumulate more than 150 days of unemployment across both the initial OPT and STEM extension periods combined.
+    threshold: 150
+    unit: days
+    citation: "8 CFR § 214.2(f)(10)(ii)(C); 81 FR 13040 (Mar. 11, 2016)"
+  - id: unemployment-definition
+    summary: An unemployment day is any calendar day within the OPT authorization window on which the student is not engaged in qualifying employment (i.e., employment directly related to the degree program).
+    citation: "SEVP Policy Guidance 1004-03 (Apr. 8, 2024)"

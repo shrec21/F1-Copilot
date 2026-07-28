@@ -1,1 +1,20 @@
-# placeholder — filled in Task 2
+topic: d-s-transition-2026
+effective_date: "2026-09-15"
+source_url: "https://www.federalregister.gov/documents/2025/01/17/2025-01053/enhancing-program-integrity-for-f-and-m-nonimmigrant-students"
+disclaimer: >
+  The fixed-period admission rule takes effect September 15, 2026. This tool
+  tracks relevant dates and deadlines based on the information you enter.
+  This is not legal advice. Consult your DSO or an immigration attorney
+  about how this rule change affects your specific situation.
+rules:
+  - id: fixed-period-admission-effective-date
+    summary: Beginning September 15, 2026, F-1 students will be admitted for a fixed period (the program end date plus any authorized grace period) rather than Duration of Status (D/S).
+    citation: "DHS Final Rule, 90 FR 5854 (Jan. 17, 2025); effective Sept. 15, 2026"
+  - id: pending-ds-filing-deadline
+    summary: F-1 students currently in D/S status who wish to remain under D/S must file an application with USCIS by March 18, 2027, or they will be subject to the fixed-period regime.
+    citation: "DHS Final Rule, 90 FR 5854 (Jan. 17, 2025), transition provisions"
+  - id: ds-grace-period
+    summary: Under the fixed-period regime, students are granted a 60-day grace period after the program end date to depart, transfer, or change status.
+    threshold: 60
+    unit: days
+    citation: "DHS Final Rule, 90 FR 5854 (Jan. 17, 2025)"
