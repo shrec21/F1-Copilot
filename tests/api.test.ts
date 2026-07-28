@@ -99,11 +99,22 @@ describe('GET /status with profile and OPT employment', () => {
 
     const res = await app.inject({ method: 'GET', url: '/status' });
     expect(res.statusCode).toBe(200);
-    const body = res.json() as Record<string, unknown>;
+    const body = res.json() as {
+      unemployment: { disclaimer: string } | null;
+      cptImpact: unknown;
+      conflicts: unknown;
+      dsStatus: { disclaimer: string };
+    };
     expect(body).toHaveProperty('unemployment');
     expect(body).toHaveProperty('cptImpact');
     expect(body).toHaveProperty('conflicts');
     expect(body).toHaveProperty('dsStatus');
+    // Verify disclaimers are propagated — guards against silent stripping
+    expect(body.unemployment).not.toBeNull();
+    expect(typeof body.unemployment!.disclaimer).toBe('string');
+    expect(body.unemployment!.disclaimer.length).toBeGreaterThan(0);
+    expect(typeof body.dsStatus.disclaimer).toBe('string');
+    expect(body.dsStatus.disclaimer.length).toBeGreaterThan(0);
   });
 });
 

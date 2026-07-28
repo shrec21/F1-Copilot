@@ -121,7 +121,7 @@ export function getOptWindow(): DateRange | null {
     WHERE auth_type IN ('OPT', 'STEM-OPT')
     ORDER BY start_date DESC
     LIMIT 1
-  `).get() as { start_date: string; end_date: string } | undefined;
+  `).get() as { start_date: string; end_date: string } | undefined; // Safe cast: authorizations.end_date is TEXT NOT NULL in the schema, so it is always a string.
 
   if (!row) return null;
   return { start: row.start_date, end: row.end_date };
