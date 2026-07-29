@@ -3,3 +3,7 @@ dist/
 *.js.map
 
 tests/*.js
+
+.env
+.env.*
+!.env.example

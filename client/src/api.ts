@@ -25,31 +25,48 @@ export interface AuthInput {
 }
 
 export interface StatusResponse {
-  optUnemployment?: {
-    daysUsed: number;
-    cap: number;
+  unemployment: {
+    usedDays: number;
+    remainingDays: number;
     status: 'ok' | 'warning' | 'exceeded';
-  };
-  cptImpact?: {
+    appliedRuleId: string;
+    disclaimer: string;
+  } | null;
+  cptImpact: {
     totalFullTimeMonths: number;
     optEligibilityAtRisk: boolean;
+    appliedRuleId: string;
+    disclaimer: string;
   };
-  conflicts?: Array<{
-    type: string;
+  conflicts: Array<{
+    roleIds: [string, string];
+    overlapStart: string;
+    overlapEnd: string;
+    ruleId: string;
     description: string;
-    severity: 'error' | 'warning';
   }>;
-  dsTransition?: {
-    regime: string;
-    transitionDeadline: string;
-    graceperiodEndDate: string;
+  dsStatus: {
+    regime: 'D/S' | 'fixed-date';
+    transitionDeadline: string | null;
+    graceperiodEndDate: string | null;
+    appliedRuleId: string;
+    disclaimer: string;
   };
 }
 
 export interface RuleResponse {
   topic: string;
-  text: string;
+  effective_date: string;
+  source_url: string;
   disclaimer: string;
+  rules: Array<{
+    id: string;
+    summary: string;
+    threshold?: number;
+    unit?: string;
+    citation: string;
+    deadline?: string;
+  }>;
 }
 
 export async function getStatus(): Promise<StatusResponse> {

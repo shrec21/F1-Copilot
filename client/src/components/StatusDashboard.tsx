@@ -73,31 +73,33 @@ export function StatusDashboard() {
   return (
     <div className="space-y-6">
       {/* OPT Unemployment Clock */}
-      {data.optUnemployment && (
+      {data.unemployment && (
         <section className="bg-white rounded-lg border border-gray-200 p-5 shadow-sm">
           <h2 className="text-base font-semibold text-gray-800 mb-2">
             OPT Unemployment Clock
           </h2>
           <p className="text-sm text-gray-600">
-            <span className="font-medium">{data.optUnemployment.daysUsed}</span> /{' '}
-            {data.optUnemployment.cap} days used
+            <span className="font-medium">{data.unemployment.usedDays}</span> /{' '}
+            {data.unemployment.usedDays + data.unemployment.remainingDays} days used
           </p>
           <ProgressBar
-            value={data.optUnemployment.daysUsed}
-            max={data.optUnemployment.cap}
-            status={data.optUnemployment.status}
+            value={data.unemployment.usedDays}
+            max={data.unemployment.usedDays + data.unemployment.remainingDays}
+            status={data.unemployment.status}
           />
           <p
             className={`mt-1 text-xs font-medium ${
-              data.optUnemployment.status === 'exceeded'
+              data.unemployment.status === 'exceeded'
                 ? 'text-red-600'
-                : data.optUnemployment.status === 'warning'
+                : data.unemployment.status === 'warning'
                 ? 'text-yellow-600'
                 : 'text-green-600'
             }`}
           >
-            Status: {data.optUnemployment.status.toUpperCase()}
+            Status: {data.unemployment.status.toUpperCase()}
           </p>
+          <p className="text-xs text-gray-500 mt-1">{data.unemployment.disclaimer}</p>
+          <p className="text-xs text-gray-400 mt-0.5">Rule: {data.unemployment.appliedRuleId}</p>
         </section>
       )}
 
@@ -117,6 +119,8 @@ export function StatusDashboard() {
             OPT eligibility at risk:{' '}
             {data.cptImpact.optEligibilityAtRisk ? 'YES' : 'NO'}
           </p>
+          <p className="text-xs text-gray-500 mt-1">{data.cptImpact.disclaimer}</p>
+          <p className="text-xs text-gray-400 mt-0.5">Rule: {data.cptImpact.appliedRuleId}</p>
         </section>
       )}
 
@@ -130,14 +134,13 @@ export function StatusDashboard() {
             {data.conflicts.map((c, i) => (
               <li
                 key={i}
-                className={`text-sm px-3 py-2 rounded ${
-                  c.severity === 'error'
-                    ? 'bg-red-50 text-red-800 border border-red-200'
-                    : 'bg-yellow-50 text-yellow-800 border border-yellow-200'
-                }`}
+                className="text-sm px-3 py-2 rounded bg-red-50 text-red-800 border border-red-200"
               >
-                <span className="font-medium uppercase text-xs">{c.severity}</span>:{' '}
-                {c.description}
+                <p className="font-medium">{c.description}</p>
+                <p className="text-xs mt-0.5 text-red-600">
+                  {c.overlapStart} – {c.overlapEnd}
+                </p>
+                <p className="text-xs text-red-400 mt-0.5">Rule: {c.ruleId}</p>
               </li>
             ))}
           </ul>
@@ -145,23 +148,25 @@ export function StatusDashboard() {
       </section>
 
       {/* D/S Transition */}
-      {data.dsTransition && (
+      {data.dsStatus && (
         <section className="bg-white rounded-lg border border-gray-200 p-5 shadow-sm">
           <h2 className="text-base font-semibold text-gray-800 mb-2">D/S Transition</h2>
           <dl className="text-sm text-gray-600 space-y-1">
             <div>
               <dt className="inline font-medium">Regime: </dt>
-              <dd className="inline">{data.dsTransition.regime}</dd>
+              <dd className="inline">{data.dsStatus.regime}</dd>
             </div>
             <div>
               <dt className="inline font-medium">Transition deadline: </dt>
-              <dd className="inline">{data.dsTransition.transitionDeadline}</dd>
+              <dd className="inline">{data.dsStatus.transitionDeadline ?? 'N/A'}</dd>
             </div>
             <div>
               <dt className="inline font-medium">Grace period end: </dt>
-              <dd className="inline">{data.dsTransition.graceperiodEndDate}</dd>
+              <dd className="inline">{data.dsStatus.graceperiodEndDate ?? 'N/A'}</dd>
             </div>
           </dl>
+          <p className="text-xs text-gray-500 mt-1">{data.dsStatus.disclaimer}</p>
+          <p className="text-xs text-gray-400 mt-0.5">Rule: {data.dsStatus.appliedRuleId}</p>
         </section>
       )}
     </div>

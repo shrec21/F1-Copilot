@@ -28,6 +28,8 @@ export const db: InstanceType<typeof Database> = new Proxy({} as InstanceType<ty
   },
 });
 
+// TODO: Authentication required before public deployment.
+// This is single-user MVP only. Add session auth before exposing to multiple users.
 export function initDb(): void {
   if (!_db) {
     _db = new Database(getDbPath());
