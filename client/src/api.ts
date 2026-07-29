@@ -1,11 +1,12 @@
 const BASE = 'http://localhost:3000';
 
 export interface ProfileInput {
-  studentId: string;
-  programStart: string;
-  programEnd: string;
-  degreeLevel: 'bachelors' | 'masters' | 'doctorate';
-  dsoCampus: string;
+  fullName: string;
+  programEndDate: string;
+  degreeLevel: string;
+  visaAdmissionType: 'D/S' | 'fixed-date';
+  admissionDate: string;
+  isStemEligible: boolean;
 }
 
 export interface EmploymentInput {
@@ -33,6 +34,7 @@ export interface StatusResponse {
     disclaimer: string;
   } | null;
   cptImpact: {
+    totalFullTimeDays: number;
     totalFullTimeMonths: number;
     optEligibilityAtRisk: boolean;
     appliedRuleId: string;
@@ -78,6 +80,13 @@ export async function getStatus(): Promise<StatusResponse> {
   return res.json();
 }
 
+export async function getProfile(): Promise<ProfileInput | null> {
+  const res = await fetch(`${BASE}/profile`);
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error(res.statusText);
+  return res.json();
+}
+
 export async function postProfile(data: ProfileInput): Promise<{ ok: boolean }> {
   const res = await fetch(`${BASE}/profile`, {
     method: 'POST',
@@ -89,6 +98,41 @@ export async function postProfile(data: ProfileInput): Promise<{ ok: boolean }> 
     throw new Error(err.message || res.statusText);
   }
   return res.json();
+}
+
+export interface EmploymentRecord {
+  id: string;
+  employer: string;
+  authorizationType: 'CPT' | 'OPT' | 'STEM-OPT';
+  cptType?: 'full-time' | 'part-time';
+  hoursPerWeek: number;
+  period: { start: string; end?: string };
+}
+
+export async function getEmployment(): Promise<EmploymentRecord[]> {
+  const res = await fetch(`${BASE}/employment`);
+  if (!res.ok) throw new Error(res.statusText);
+  return res.json();
+}
+
+export async function putEmployment(id: string, data: EmploymentInput): Promise<void> {
+  const res = await fetch(`${BASE}/employment/${encodeURIComponent(id)}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ message: res.statusText }));
+    throw new Error(err.message || res.statusText);
+  }
+}
+
+export async function deleteEmployment(id: string): Promise<void> {
+  const res = await fetch(`${BASE}/employment/${encodeURIComponent(id)}`, { method: 'DELETE' });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ message: res.statusText }));
+    throw new Error(err.message || res.statusText);
+  }
 }
 
 export async function postEmployment(data: EmploymentInput): Promise<{ ok: boolean }> {
@@ -136,5 +180,25 @@ export async function ask(question: string): Promise<{ answer: string }> {
     const err = await res.json().catch(() => ({ message: res.statusText }));
     throw new Error(err.message || res.statusText);
   }
+  return res.json();
+}
+
+export interface NewsItem {
+  title: string;
+  summary: string;
+  link: string;
+  pubDate: string;
+  source: string;
+}
+
+export interface NewsFetchResult {
+  items: NewsItem[];
+  fetchedAt: string;
+  error?: string;
+}
+
+export async function getNews(): Promise<NewsFetchResult> {
+  const res = await fetch(`${BASE}/news`);
+  if (!res.ok) throw new Error(res.statusText);
   return res.json();
 }

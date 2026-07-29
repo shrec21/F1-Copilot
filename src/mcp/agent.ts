@@ -1,12 +1,14 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { loadRuleFile } from '../rules/loader';
 import { TOPIC_TO_FILENAME } from '../rules/topics';
+import { fetchImmigrationNews } from '../news/fetcher';
 
 const SYSTEM_PROMPT = `You are an F-1 student visa compliance assistant.
 
-You have access to two tools:
+You have access to three tools:
 - lookup_rule: retrieves the official rule text, citations, and disclaimer for a topic
 - get_compliance_status: retrieves the user's current computed compliance data
+- fetch_immigration_news: retrieves recent USCIS/DHS news headlines (INFORMATIONAL ONLY)
 
 Rules for every response:
 1. ALWAYS call lookup_rule for the relevant topic before answering any rule question.
@@ -17,7 +19,12 @@ Rules for every response:
    "This isn't covered by what I can verify — please talk to your DSO or an immigration attorney."
    Do not improvise, interpret, or speculate about rules not in the corpus.
 6. Never say "you are compliant" or "this is legal" as a bare conclusion.
-   Always frame answers as: computed fact + rule citation + disclaimer.`;
+   Always frame answers as: computed fact + rule citation + disclaimer.
+7. CRITICAL: fetch_immigration_news results are INFORMATIONAL ONLY. You may summarize news
+   headlines when a user explicitly asks "what's new" or "any recent updates", but you must
+   NEVER use news content to answer compliance questions, interpret rules, or modify any
+   conclusion drawn from lookup_rule or get_compliance_status. Always append:
+   "Note: these are news summaries only — verify any policy changes at uscis.gov before acting."`;
 
 const TOOL_DEFINITIONS: Anthropic.Tool[] = [
   {
@@ -46,6 +53,16 @@ const TOOL_DEFINITIONS: Anthropic.Tool[] = [
       required: [],
     },
   },
+  {
+    name: 'fetch_immigration_news',
+    description:
+      'Fetch recent USCIS/DHS immigration news headlines. FOR INFORMATIONAL DISPLAY ONLY — must never be used to answer compliance questions or interpret rules.',
+    input_schema: {
+      type: 'object',
+      properties: {},
+      required: [],
+    },
+  },
 ];
 
 /**
@@ -65,6 +82,11 @@ async function executeTool(name: string, input: Record<string, unknown>): Promis
     const res = await fetch('http://localhost:3000/status');
     const data = await res.json() as unknown;
     return JSON.stringify(data);
+  }
+
+  if (name === 'fetch_immigration_news') {
+    const result = await fetchImmigrationNews(10);
+    return JSON.stringify(result);
   }
 
   return JSON.stringify({ error: `Unknown tool: ${name}` });

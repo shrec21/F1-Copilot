@@ -4,14 +4,18 @@ import { StatusDashboard } from './components/StatusDashboard';
 import { LogEmploymentForm } from './components/LogEmploymentForm';
 import { ChatBox } from './components/ChatBox';
 import { RulesTab } from './components/RulesTab';
+import { ProfileSetupForm } from './components/ProfileSetupForm';
+import { NewsPanel } from './components/NewsPanel';
 
-type Tab = 'dashboard' | 'employment' | 'chat' | 'rules';
+type Tab = 'dashboard' | 'profile' | 'employment' | 'chat' | 'rules' | 'news';
 
 const TABS: { id: Tab; label: string }[] = [
   { id: 'dashboard', label: 'Dashboard' },
+  { id: 'profile', label: 'Profile' },
   { id: 'employment', label: 'Log Employment' },
   { id: 'chat', label: 'Chat' },
   { id: 'rules', label: 'Rules' },
+  { id: 'news', label: 'News' },
 ];
 
 function App() {
@@ -52,9 +56,13 @@ function App() {
       {/* Tab content */}
       <main className="flex-1 px-4 py-6 max-w-3xl w-full mx-auto">
         {activeTab === 'dashboard' && <StatusDashboard />}
+        {activeTab === 'profile' && (
+          <ProfileSetupForm onFirstSave={() => setActiveTab('dashboard')} />
+        )}
         {activeTab === 'employment' && <LogEmploymentForm />}
         {activeTab === 'chat' && <ChatBox />}
         {activeTab === 'rules' && <RulesTab />}
+        {activeTab === 'news' && <NewsPanel />}
       </main>
     </div>
   );

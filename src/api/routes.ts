@@ -9,11 +9,14 @@ import {
   getUserProfile,
   insertEmploymentPeriod,
   getAllEmploymentPeriods,
+  updateEmploymentPeriod,
+  deleteEmploymentPeriod,
   insertAuthorization,
   getOptWindow,
 } from '../data/queries';
 import { askAgent } from '../mcp/agent';
 import { TOPIC_TO_FILENAME } from '../rules/topics';
+import { fetchImmigrationNews } from '../news/fetcher';
 
 export function registerRoutes(fastify: FastifyInstance): void {
 
@@ -51,6 +54,13 @@ export function registerRoutes(fastify: FastifyInstance): void {
     });
 
     return reply.status(201).send({ ok: true });
+  });
+
+  // GET /profile — return current profile
+  fastify.get('/profile', async (_request, reply) => {
+    const profile = getUserProfile();
+    if (!profile) return reply.status(404).send({ error: 'No profile set' });
+    return reply.send(profile);
   });
 
   // POST /employment — log a new employment period
@@ -92,6 +102,62 @@ export function registerRoutes(fastify: FastifyInstance): void {
     });
 
     return reply.status(201).send({ id });
+  });
+
+  // GET /employment — list all logged employment periods
+  fastify.get('/employment', async (_request, reply) => {
+    const periods = getAllEmploymentPeriods();
+    return reply.send(periods);
+  });
+
+  // PUT /employment/:id — update an employment period
+  fastify.put<{ Params: { id: string } }>('/employment/:id', async (request, reply) => {
+    const id = Number(request.params.id);
+    if (!Number.isInteger(id) || id <= 0) {
+      return reply.status(400).send({ error: 'Invalid id' });
+    }
+    const body = request.body as {
+      employer?: unknown;
+      authType?: unknown;
+      cptType?: unknown;
+      hoursPerWeek?: unknown;
+      startDate?: unknown;
+      endDate?: unknown;
+    };
+    if (
+      typeof body.employer !== 'string' ||
+      (body.authType !== 'CPT' && body.authType !== 'OPT' && body.authType !== 'STEM-OPT') ||
+      typeof body.hoursPerWeek !== 'number' ||
+      typeof body.startDate !== 'string'
+    ) {
+      return reply.status(400).send({
+        error: 'Missing or invalid fields: employer, authType, hoursPerWeek, startDate',
+      });
+    }
+    if (body.authType === 'CPT' && body.cptType !== 'full-time' && body.cptType !== 'part-time') {
+      return reply.status(400).send({ error: 'cptType required for CPT: full-time or part-time' });
+    }
+    const updated = updateEmploymentPeriod(id, {
+      employer: body.employer,
+      authType: body.authType as 'CPT' | 'OPT' | 'STEM-OPT',
+      cptType: body.cptType as 'full-time' | 'part-time' | undefined,
+      hoursPerWeek: body.hoursPerWeek,
+      startDate: body.startDate,
+      endDate: typeof body.endDate === 'string' ? body.endDate : undefined,
+    });
+    if (!updated) return reply.status(404).send({ error: 'Employment record not found' });
+    return reply.send({ ok: true });
+  });
+
+  // DELETE /employment/:id — remove an employment period
+  fastify.delete<{ Params: { id: string } }>('/employment/:id', async (request, reply) => {
+    const id = Number(request.params.id);
+    if (!Number.isInteger(id) || id <= 0) {
+      return reply.status(400).send({ error: 'Invalid id' });
+    }
+    const deleted = deleteEmploymentPeriod(id);
+    if (!deleted) return reply.status(404).send({ error: 'Employment record not found' });
+    return reply.send({ ok: true });
   });
 
   // POST /authorization — log a CPT/OPT/STEM-OPT authorization
@@ -197,5 +263,11 @@ export function registerRoutes(fastify: FastifyInstance): void {
     }
     const answer = await askAgent(question);
     return reply.send({ answer });
+  });
+
+  // GET /news — fetch recent immigration news headlines (informational only)
+  fastify.get('/news', async (_request, reply) => {
+    const result = await fetchImmigrationNews(10);
+    return reply.send(result);
   });
 }

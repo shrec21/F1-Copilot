@@ -1,8 +1,14 @@
+import 'dotenv/config';
 import Fastify from 'fastify';
+import cors from '@fastify/cors';
 import { initDb } from './data/schema';
 import { registerRoutes } from './api/routes';
 
 const fastify = Fastify({ logger: false });
+fastify.register(cors, {
+  origin: ['http://localhost:5173', 'http://localhost:5174'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+});
 
 fastify.get('/health', async (_request, _reply) => {
   return { ok: true };

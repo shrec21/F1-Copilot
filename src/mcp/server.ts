@@ -3,6 +3,7 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import { loadRuleFile } from '../rules/loader';
 import { TOPIC_TO_FILENAME } from '../rules/topics';
+import { fetchImmigrationNews } from '../news/fetcher';
 
 /**
  * Handles a tool call by name with the given arguments.
@@ -41,6 +42,13 @@ export async function handleToolCall(
     };
   }
 
+  if (name === 'fetch_immigration_news') {
+    const result = await fetchImmigrationNews(10);
+    return {
+      content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+    };
+  }
+
   return {
     content: [{ type: 'text', text: `Error: unknown tool "${name}"` }],
     isError: true,
@@ -75,6 +83,16 @@ export function createServer(): Server {
         name: 'get_compliance_status',
         description:
           'Get the current computed compliance status for the user. Returns unemployment days used/remaining, CPT impact, conflicts, and D/S transition status.',
+        inputSchema: {
+          type: 'object' as const,
+          properties: {},
+          required: [],
+        },
+      },
+      {
+        name: 'fetch_immigration_news',
+        description:
+          'Fetch recent USCIS/DHS immigration news headlines. FOR INFORMATIONAL DISPLAY ONLY — results must never be used to answer compliance questions or interpret rules. Use only when the user explicitly asks about recent news or updates.',
         inputSchema: {
           type: 'object' as const,
           properties: {},
