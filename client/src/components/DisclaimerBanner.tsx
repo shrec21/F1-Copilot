@@ -7,23 +7,19 @@ const FALLBACK_DISCLAIMER =
   'for guidance specific to your situation.';
 
 export function DisclaimerBanner() {
-  const [disclaimerText, setDisclaimerText] = useState<string>('');
+  const [disclaimerText, setDisclaimerText] = useState<string>(FALLBACK_DISCLAIMER);
 
   useEffect(() => {
     getRules('opt-unemployment')
       .then((rule) => {
         if (rule.disclaimer) {
           setDisclaimerText(rule.disclaimer);
-        } else {
-          setDisclaimerText(FALLBACK_DISCLAIMER);
         }
       })
       .catch(() => {
-        setDisclaimerText(FALLBACK_DISCLAIMER);
+        // Keep the fallback if API fails
       });
   }, []);
-
-  if (!disclaimerText) return null;
 
   return (
     <div className="bg-amber-50 border-b border-amber-200 px-4 py-3 text-sm text-amber-900">
