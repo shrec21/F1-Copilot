@@ -14,6 +14,7 @@ vi.mock('../src/mcp/agent', () => ({
 
 import { handleToolCall } from '../src/mcp/server';
 import type { RuleFile } from '../src/rules/types';
+import { askAgent } from '../src/mcp/agent';
 
 // ─── Fastify app for /ask route tests ─────────────────────────────────────────
 let app: FastifyInstance;
@@ -91,5 +92,26 @@ describe('POST /ask', () => {
     const body = res.json() as { answer: string };
     expect(typeof body.answer).toBe('string');
     expect(body.answer).toBe('Mocked agent answer');
+  });
+
+  it('propagates DSO fallback phrase when question is out of corpus', async () => {
+    // The system prompt is the primary enforcement mechanism that instructs the model
+    // to return the exact DSO fallback phrase for out-of-corpus questions. This test
+    // verifies that the phrase travels correctly through the /ask route to the caller.
+    const DSO_FALLBACK =
+      "This isn't covered by what I can verify — please talk to your DSO or an immigration attorney.";
+
+    // Override the mock for this one call to simulate an out-of-corpus response
+    vi.mocked(askAgent).mockResolvedValueOnce(DSO_FALLBACK);
+
+    const res = await app.inject({
+      method: 'POST',
+      url: '/ask',
+      payload: { question: 'Can I work on a tourist visa?' },
+    });
+
+    expect(res.statusCode).toBe(200);
+    const body = res.json() as { answer: string };
+    expect(body.answer).toContain('talk to your DSO');
   });
 });

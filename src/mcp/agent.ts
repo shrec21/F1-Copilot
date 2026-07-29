@@ -1,12 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { loadRuleFile } from '../rules/loader';
-
-// Map of topic slug → YAML filename (mirrored from server.ts)
-const topicToFilename: Record<string, string> = {
-  'opt-unemployment':    'opt-unemployment.yaml',
-  'cpt-authorization':   'cpt-authorization.yaml',
-  'd-s-transition-2026': 'd-s-transition-2026.yaml',
-};
+import { TOPIC_TO_FILENAME } from '../rules/topics';
 
 const SYSTEM_PROMPT = `You are an F-1 student visa compliance assistant.
 
@@ -60,10 +54,10 @@ const TOOL_DEFINITIONS: Anthropic.Tool[] = [
 async function executeTool(name: string, input: Record<string, unknown>): Promise<string> {
   if (name === 'lookup_rule') {
     const topic = input['topic'] as string | undefined;
-    if (!topic || !topicToFilename[topic]) {
+    if (!topic || !TOPIC_TO_FILENAME[topic]) {
       return JSON.stringify({ error: `Unknown topic: ${String(topic)}` });
     }
-    const ruleFile = loadRuleFile(topicToFilename[topic]);
+    const ruleFile = loadRuleFile(TOPIC_TO_FILENAME[topic]);
     return JSON.stringify(ruleFile);
   }
 

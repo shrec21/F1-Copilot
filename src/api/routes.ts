@@ -13,6 +13,7 @@ import {
   getOptWindow,
 } from '../data/queries';
 import { askAgent } from '../mcp/agent';
+import { TOPIC_TO_FILENAME } from '../rules/topics';
 
 export function registerRoutes(fastify: FastifyInstance): void {
 
@@ -182,12 +183,7 @@ export function registerRoutes(fastify: FastifyInstance): void {
   // GET /rules/:topic — return rule text for a topic
   fastify.get<{ Params: { topic: string } }>('/rules/:topic', async (request, reply) => {
     const { topic } = request.params;
-    const fileMap: Record<string, string> = {
-      'opt-unemployment':    'opt-unemployment.yaml',
-      'cpt-authorization':   'cpt-authorization.yaml',
-      'd-s-transition-2026': 'd-s-transition-2026.yaml',
-    };
-    const filename = fileMap[topic];
+    const filename = TOPIC_TO_FILENAME[topic];
     if (!filename) return reply.status(404).send({ error: `Unknown topic: ${topic}` });
     const rules = loadRuleFile(filename);
     return reply.send(rules);

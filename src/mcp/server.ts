@@ -2,13 +2,7 @@ import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import { loadRuleFile } from '../rules/loader';
-
-// Map of topic slug → YAML filename
-const topicToFilename: Record<string, string> = {
-  'opt-unemployment':    'opt-unemployment.yaml',
-  'cpt-authorization':   'cpt-authorization.yaml',
-  'd-s-transition-2026': 'd-s-transition-2026.yaml',
-};
+import { TOPIC_TO_FILENAME } from '../rules/topics';
 
 /**
  * Handles a tool call by name with the given arguments.
@@ -26,7 +20,7 @@ export async function handleToolCall(
         isError: true,
       };
     }
-    const filename = topicToFilename[topic];
+    const filename = TOPIC_TO_FILENAME[topic];
     if (!filename) {
       return {
         content: [{ type: 'text', text: `Error: unknown topic "${topic}"` }],
