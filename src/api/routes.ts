@@ -4,6 +4,8 @@ import { computeUnemploymentDays } from '../engine/unemployment-clock';
 import { checkCptEligibilityImpact } from '../engine/cpt-tracker';
 import { checkConcurrentEmploymentConflicts } from '../engine/concurrent-employment';
 import { checkDsTransitionStatus } from '../engine/ds-transition';
+import { computeAlerts } from '../engine/alert-engine';
+import { computeDeadlines } from '../engine/deadline-engine';
 import {
   upsertUserProfile,
   getUserProfile,
@@ -13,10 +15,73 @@ import {
   deleteEmploymentPeriod,
   insertAuthorization,
   getOptWindow,
+  getAllAuthorizations,
 } from '../data/queries';
 import { askAgent } from '../mcp/agent';
+import { generateDsoEmail } from '../mcp/dso-email';
 import { TOPIC_TO_FILENAME } from '../rules/topics';
 import { fetchImmigrationNews } from '../news/fetcher';
+import type { Role } from '../engine/types';
+
+interface FullStatus {
+  unemployment: ReturnType<typeof computeUnemploymentDays> | null;
+  cptImpact: ReturnType<typeof checkCptEligibilityImpact>;
+  conflicts: ReturnType<typeof checkConcurrentEmploymentConflicts>;
+  dsStatus: ReturnType<typeof checkDsTransitionStatus>;
+}
+
+function computeFullStatus(
+  profile: NonNullable<ReturnType<typeof getUserProfile>>,
+  roles: Role[],
+): FullStatus {
+  const optWindow = getOptWindow();
+
+  const optRules = loadRuleFile('opt-unemployment.yaml');
+  const cptRules = loadRuleFile('cpt-authorization.yaml');
+  const dsRules  = loadRuleFile('d-s-transition-2026.yaml');
+
+  const capRule = profile.isStemEligible
+    ? optRules.rules.find(r => r.id === 'stem-opt-unemployment-cap')!
+    : optRules.rules.find(r => r.id === 'standard-opt-unemployment-cap')!;
+
+  const unemployment = optWindow
+    ? computeUnemploymentDays(
+        roles.filter(r => r.authorizationType === 'OPT' || r.authorizationType === 'STEM-OPT')
+             .map(r => r.period),
+        optWindow,
+        capRule.threshold!,
+        capRule.id,
+        optRules.disclaimer,
+      )
+    : null;
+
+  const cptCapRule = cptRules.rules.find(r => r.id === 'cpt-opt-eligibility-impact')!;
+  const cptImpact = checkCptEligibilityImpact(
+    roles.filter(r => r.authorizationType === 'CPT'),
+    cptCapRule.threshold!,
+    cptCapRule.id,
+    cptRules.disclaimer,
+  );
+
+  const conflictRule = cptRules.rules.find(r => r.id === 'cpt-per-employer-scoping')!;
+  const conflicts = checkConcurrentEmploymentConflicts(roles, conflictRule.id);
+
+  const dsEffectiveRule = dsRules.rules.find(r => r.id === 'fixed-period-admission-effective-date')!;
+  const dsGraceRule     = dsRules.rules.find(r => r.id === 'ds-grace-period')!;
+  const dsPendingRule   = dsRules.rules.find(r => r.id === 'pending-ds-filing-deadline')!;
+  const dsStatus = checkDsTransitionStatus(
+    profile.admissionDate,
+    profile.programEndDate,
+    profile.visaAdmissionType === 'D/S',
+    dsRules.effective_date,
+    dsPendingRule.deadline!,
+    dsGraceRule.threshold!,
+    dsEffectiveRule.id,
+    dsRules.disclaimer,
+  );
+
+  return { unemployment, cptImpact, conflicts, dsStatus };
+}
 
 export function registerRoutes(fastify: FastifyInstance): void {
 
@@ -190,60 +255,107 @@ export function registerRoutes(fastify: FastifyInstance): void {
   });
 
   // GET /status — compute and return all compliance flags
-  fastify.get('/status', async (request, reply) => {
+  fastify.get('/status', async (_request, reply) => {
     const profile = getUserProfile();
     if (!profile) return reply.status(404).send({ error: 'Profile not set. POST /profile first.' });
 
     const roles = getAllEmploymentPeriods();
-    const optWindow = getOptWindow();
-
-    // Load rule files
-    const optRules = loadRuleFile('opt-unemployment.yaml');
-    const cptRules = loadRuleFile('cpt-authorization.yaml');
-    const dsRules  = loadRuleFile('d-s-transition-2026.yaml');
-
-    // Pick the right unemployment cap rule (STEM vs standard)
-    const capRule = profile.isStemEligible
-      ? optRules.rules.find(r => r.id === 'stem-opt-unemployment-cap')!
-      : optRules.rules.find(r => r.id === 'standard-opt-unemployment-cap')!;
-
-    const unemployment = optWindow
-      ? computeUnemploymentDays(
-          roles.filter(r => r.authorizationType === 'OPT' || r.authorizationType === 'STEM-OPT')
-               .map(r => r.period),
-          optWindow,
-          capRule.threshold!,
-          capRule.id,
-          optRules.disclaimer,
-        )
-      : null;
-
-    const cptCapRule = cptRules.rules.find(r => r.id === 'cpt-opt-eligibility-impact')!;
-    const cptImpact = checkCptEligibilityImpact(
-      roles.filter(r => r.authorizationType === 'CPT'),
-      cptCapRule.threshold!,
-      cptCapRule.id,
-      cptRules.disclaimer,
-    );
-
-    const conflictRule = cptRules.rules.find(r => r.id === 'cpt-per-employer-scoping')!;
-    const conflicts = checkConcurrentEmploymentConflicts(roles, conflictRule.id);
-
-    const dsEffectiveRule = dsRules.rules.find(r => r.id === 'fixed-period-admission-effective-date')!;
-    const dsGraceRule     = dsRules.rules.find(r => r.id === 'ds-grace-period')!;
-    const dsPendingRule   = dsRules.rules.find(r => r.id === 'pending-ds-filing-deadline')!;
-    const dsStatus = checkDsTransitionStatus(
-      profile.admissionDate,
-      profile.programEndDate,
-      profile.visaAdmissionType === 'D/S',
-      dsRules.effective_date,
-      dsPendingRule.deadline!,
-      dsGraceRule.threshold!,
-      dsEffectiveRule.id,
-      dsRules.disclaimer,
-    );
-
+    const { unemployment, cptImpact, conflicts, dsStatus } = computeFullStatus(profile, roles);
     return reply.send({ unemployment, cptImpact, conflicts, dsStatus });
+  });
+
+  // GET /alerts — proactive risk alerts
+  fastify.get('/alerts', async (_request, reply) => {
+    const profile = getUserProfile();
+    if (!profile) return reply.status(404).send({ error: 'Profile not set. POST /profile first.' });
+
+    const roles = getAllEmploymentPeriods();
+    const { unemployment, cptImpact, conflicts, dsStatus } = computeFullStatus(profile, roles);
+    const todayIso = new Date().toISOString().slice(0, 10);
+    const alerts = computeAlerts(unemployment, cptImpact, conflicts, dsStatus, todayIso);
+    return reply.send(alerts);
+  });
+
+  // GET /deadlines — urgency-sorted deadline cards
+  fastify.get('/deadlines', async (_request, reply) => {
+    const profile = getUserProfile();
+    if (!profile) return reply.status(404).send({ error: 'Profile not set. POST /profile first.' });
+
+    const roles = getAllEmploymentPeriods();
+    const { unemployment, dsStatus } = computeFullStatus(profile, roles);
+    const todayIso = new Date().toISOString().slice(0, 10);
+    const deadlines = computeDeadlines(unemployment, dsStatus, profile.programEndDate, todayIso);
+    return reply.send(deadlines);
+  });
+
+  // POST /simulate — run engine with hypothetical roles (no DB write)
+  fastify.post('/simulate', async (request, reply) => {
+    const profile = getUserProfile();
+    if (!profile) return reply.status(404).send({ error: 'Profile not set. POST /profile first.' });
+
+    const body = request.body as {
+      roles?: unknown;
+      optWindow?: unknown;
+    };
+
+    if (!Array.isArray(body.roles)) {
+      return reply.status(400).send({ error: 'roles must be an array' });
+    }
+
+    // Build hypothetical roles (merge existing DB roles + simulated roles)
+    const existingRoles = getAllEmploymentPeriods();
+    const simulatedRoles: Role[] = (body.roles as Array<{
+      id?: string;
+      employer?: unknown;
+      authType?: unknown;
+      cptType?: unknown;
+      hoursPerWeek?: unknown;
+      startDate?: unknown;
+      endDate?: unknown;
+    }>).map((r, idx) => ({
+      id: `sim-${idx}`,
+      employer: typeof r.employer === 'string' ? r.employer : 'Simulated Employer',
+      authorizationType: (r.authType as 'CPT' | 'OPT' | 'STEM-OPT') ?? 'OPT',
+      hoursPerWeek: typeof r.hoursPerWeek === 'number' ? r.hoursPerWeek : 40,
+      period: {
+        start: typeof r.startDate === 'string' ? r.startDate : new Date().toISOString().slice(0, 10),
+        end: typeof r.endDate === 'string' ? r.endDate : undefined,
+      },
+      cptType: (r.cptType as 'full-time' | 'part-time' | undefined),
+    }));
+
+    const allRoles = [...existingRoles, ...simulatedRoles];
+    const { unemployment, cptImpact, conflicts, dsStatus } = computeFullStatus(profile, allRoles);
+    return reply.send({ unemployment, cptImpact, conflicts, dsStatus });
+  });
+
+  // POST /dso-email — generate a professional email to DSO
+  fastify.post('/dso-email', async (request, reply) => {
+    const profile = getUserProfile();
+    if (!profile) return reply.status(404).send({ error: 'Profile not set. POST /profile first.' });
+
+    const body = request.body as {
+      emailType?: unknown;
+      additionalContext?: unknown;
+    };
+
+    const validTypes = ['cpt-request', 'opt-question', 'stem-extension', 'general-inquiry'];
+    if (!validTypes.includes(body.emailType as string)) {
+      return reply.status(400).send({ error: `emailType must be one of: ${validTypes.join(', ')}` });
+    }
+
+    const email = await generateDsoEmail(
+      body.emailType as 'cpt-request' | 'opt-question' | 'stem-extension' | 'general-inquiry',
+      profile,
+      typeof body.additionalContext === 'string' ? body.additionalContext : undefined,
+    );
+    return reply.send({ email });
+  });
+
+  // GET /authorizations — list all authorization records
+  fastify.get('/authorizations', async (_request, reply) => {
+    const records = getAllAuthorizations();
+    return reply.send(records);
   });
 
   // GET /rules/:topic — return rule text for a topic

@@ -97,6 +97,35 @@ export function getAllEmploymentPeriods(): Role[] {
   }));
 }
 
+export function updateEmploymentPeriod(id: number, period: {
+  employer: string;
+  authType: 'CPT' | 'OPT' | 'STEM-OPT';
+  cptType?: 'full-time' | 'part-time';
+  hoursPerWeek: number;
+  startDate: string;
+  endDate?: string;
+}): boolean {
+  const result = db.prepare(`
+    UPDATE employment_periods
+    SET employer = ?, auth_type = ?, cpt_type = ?, hours_per_week = ?, start_date = ?, end_date = ?
+    WHERE id = ?
+  `).run(
+    period.employer,
+    period.authType,
+    period.cptType ?? null,
+    period.hoursPerWeek,
+    period.startDate,
+    period.endDate ?? null,
+    id,
+  );
+  return result.changes > 0;
+}
+
+export function deleteEmploymentPeriod(id: number): boolean {
+  const result = db.prepare('DELETE FROM employment_periods WHERE id = ?').run(id);
+  return result.changes > 0;
+}
+
 export function insertAuthorization(auth: {
   authType: 'CPT' | 'OPT' | 'STEM-OPT';
   employer?: string;
@@ -113,6 +142,32 @@ export function insertAuthorization(auth: {
     auth.endDate,
   );
   return Number(result.lastInsertRowid);
+}
+
+export interface AuthorizationRecord {
+  id: string;
+  authType: 'CPT' | 'OPT' | 'STEM-OPT';
+  employer?: string;
+  startDate: string;
+  endDate: string;
+}
+
+export function getAllAuthorizations(): AuthorizationRecord[] {
+  const rows = db.prepare('SELECT * FROM authorizations ORDER BY start_date ASC').all() as Array<{
+    id: number;
+    auth_type: string;
+    employer: string | null;
+    start_date: string;
+    end_date: string;
+  }>;
+
+  return rows.map(row => ({
+    id: String(row.id),
+    authType: row.auth_type as 'CPT' | 'OPT' | 'STEM-OPT',
+    employer: row.employer ?? undefined,
+    startDate: row.start_date,
+    endDate: row.end_date,
+  }));
 }
 
 export function getOptWindow(): DateRange | null {

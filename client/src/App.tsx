@@ -6,13 +6,21 @@ import { ChatBox } from './components/ChatBox';
 import { RulesTab } from './components/RulesTab';
 import { ProfileSetupForm } from './components/ProfileSetupForm';
 import { NewsPanel } from './components/NewsPanel';
+import { AlertsBanner } from './components/AlertsBanner';
+import { DeadlineCountdown } from './components/DeadlineCountdown';
+import { SimulatorTab } from './components/SimulatorTab';
+import { DsoEmailTab } from './components/DsoEmailTab';
+import { TimelineTab } from './components/TimelineTab';
 
-type Tab = 'dashboard' | 'profile' | 'employment' | 'chat' | 'rules' | 'news';
+type Tab = 'dashboard' | 'profile' | 'employment' | 'chat' | 'rules' | 'news' | 'simulator' | 'dso-email' | 'timeline';
 
 const TABS: { id: Tab; label: string }[] = [
   { id: 'dashboard', label: 'Dashboard' },
   { id: 'profile', label: 'Profile' },
   { id: 'employment', label: 'Log Employment' },
+  { id: 'simulator', label: 'Simulator' },
+  { id: 'dso-email', label: 'DSO Email' },
+  { id: 'timeline', label: 'Timeline' },
   { id: 'chat', label: 'Chat' },
   { id: 'rules', label: 'Rules' },
   { id: 'news', label: 'News' },
@@ -36,12 +44,12 @@ function App() {
 
       {/* Tab navigation */}
       <nav className="bg-white border-b border-gray-200 px-4">
-        <div className="flex gap-0">
+        <div className="flex gap-0 overflow-x-auto">
           {TABS.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
+              className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                 activeTab === tab.id
                   ? 'border-blue-600 text-blue-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -55,11 +63,20 @@ function App() {
 
       {/* Tab content */}
       <main className="flex-1 px-4 py-6 max-w-3xl w-full mx-auto">
-        {activeTab === 'dashboard' && <StatusDashboard />}
+        {activeTab === 'dashboard' && (
+          <>
+            <AlertsBanner />
+            <DeadlineCountdown />
+            <StatusDashboard />
+          </>
+        )}
         {activeTab === 'profile' && (
           <ProfileSetupForm onFirstSave={() => setActiveTab('dashboard')} />
         )}
         {activeTab === 'employment' && <LogEmploymentForm />}
+        {activeTab === 'simulator' && <SimulatorTab />}
+        {activeTab === 'dso-email' && <DsoEmailTab />}
+        {activeTab === 'timeline' && <TimelineTab />}
         {activeTab === 'chat' && <ChatBox />}
         {activeTab === 'rules' && <RulesTab />}
         {activeTab === 'news' && <NewsPanel />}

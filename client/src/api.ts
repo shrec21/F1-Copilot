@@ -202,3 +202,100 @@ export async function getNews(): Promise<NewsFetchResult> {
   if (!res.ok) throw new Error(res.statusText);
   return res.json();
 }
+
+// --- New types & functions for wow features ---
+
+export interface Alert {
+  id: string;
+  severity: 'critical' | 'warning' | 'info';
+  title: string;
+  description: string;
+  deadline?: string;
+  daysUntil?: number;
+  ruleId: string;
+  action: string;
+}
+
+export interface Deadline {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  daysUntil: number;
+  severity: 'critical' | 'warning' | 'info' | 'past';
+  ruleId: string;
+  citation: string;
+}
+
+export interface AuthorizationRecord {
+  id: string;
+  authType: 'CPT' | 'OPT' | 'STEM-OPT';
+  employer?: string;
+  startDate: string;
+  endDate: string;
+}
+
+export type DsoEmailType = 'cpt-request' | 'opt-question' | 'stem-extension' | 'general-inquiry';
+
+export interface DsoEmailInput {
+  emailType: DsoEmailType;
+  additionalContext?: string;
+}
+
+export interface SimulateInput {
+  roles: Array<{
+    employer: string;
+    authType: 'CPT' | 'OPT' | 'STEM-OPT';
+    cptType?: 'full-time' | 'part-time';
+    hoursPerWeek: number;
+    startDate: string;
+    endDate?: string;
+  }>;
+  optWindow?: { start: string; end?: string };
+}
+
+export async function getAlerts(): Promise<Alert[]> {
+  const res = await fetch(`${BASE}/alerts`);
+  if (res.status === 404) return [];
+  if (!res.ok) throw new Error(res.statusText);
+  return res.json();
+}
+
+export async function getDeadlines(): Promise<Deadline[]> {
+  const res = await fetch(`${BASE}/deadlines`);
+  if (res.status === 404) return [];
+  if (!res.ok) throw new Error(res.statusText);
+  return res.json();
+}
+
+export async function getAuthorizations(): Promise<AuthorizationRecord[]> {
+  const res = await fetch(`${BASE}/authorizations`);
+  if (!res.ok) throw new Error(res.statusText);
+  return res.json();
+}
+
+export async function postSimulate(data: SimulateInput): Promise<StatusResponse> {
+  const res = await fetch(`${BASE}/simulate`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ message: res.statusText }));
+    throw new Error((err as { message?: string }).message || res.statusText);
+  }
+  return res.json();
+}
+
+export async function postDsoEmail(data: DsoEmailInput): Promise<{ email: string }> {
+  const res = await fetch(`${BASE}/dso-email`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ message: res.statusText }));
+    throw new Error((err as { message?: string }).message || res.statusText);
+  }
+  return res.json();
+}

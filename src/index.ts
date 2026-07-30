@@ -6,7 +6,7 @@ import { registerRoutes } from './api/routes';
 
 const fastify = Fastify({ logger: false });
 fastify.register(cors, {
-  origin: ['http://localhost:5173', 'http://localhost:5174'],
+  origin: /^http:\/\/localhost(:\d+)?$/,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
 });
 
