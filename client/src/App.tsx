@@ -16,8 +16,9 @@ import { DocumentChecklist } from './components/DocumentChecklist';
 import { ScenarioExplainer } from './components/ScenarioExplainer';
 import { FilingCalculator } from './components/FilingCalculator';
 import { RiskModel } from './components/RiskModel';
+import { CohortTab } from './components/CohortTab';
 
-type Tab = 'dashboard' | 'profile' | 'employment' | 'chat' | 'rules' | 'news' | 'simulator' | 'dso-email' | 'timeline' | 'action-plan' | 'documents' | 'scenarios' | 'filing' | 'risk';
+type Tab = 'dashboard' | 'profile' | 'employment' | 'chat' | 'rules' | 'news' | 'simulator' | 'dso-email' | 'timeline' | 'action-plan' | 'documents' | 'scenarios' | 'filing' | 'risk' | 'cohort';
 
 const TABS: { id: Tab; label: string }[] = [
   { id: 'dashboard', label: 'Dashboard' },
@@ -31,6 +32,7 @@ const TABS: { id: Tab; label: string }[] = [
   { id: 'simulator', label: 'Simulator' },
   { id: 'dso-email', label: 'DSO Email' },
   { id: 'timeline', label: 'Timeline' },
+  { id: 'cohort', label: 'Cohort' },
   { id: 'chat', label: 'Chat' },
   { id: 'rules', label: 'Rules' },
   { id: 'news', label: 'News' },
@@ -92,6 +94,7 @@ function App() {
         {activeTab === 'simulator' && <SimulatorTab />}
         {activeTab === 'dso-email' && <DsoEmailTab />}
         {activeTab === 'timeline' && <TimelineTab />}
+        {activeTab === 'cohort' && <CohortTab />}
         {activeTab === 'chat' && <ChatBox />}
         {activeTab === 'rules' && <RulesTab />}
         {activeTab === 'news' && <NewsPanel />}

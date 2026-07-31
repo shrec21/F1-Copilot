@@ -1,0 +1,13 @@
+{
+  "name": "@f1/rule-engine",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Pure TypeScript F-1 compliance rule engine. No runtime dependencies.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  }
+}

@@ -25,7 +25,12 @@ import {
   toggleActionStep,
   getAllDocumentStatuses,
   upsertDocumentStatus,
+  getAllStudents,
+  getStudentById,
+  getRuleContextForStudent,
+  getAuditTrailForStudent,
 } from '../data/queries';
+import { evaluateAllRules } from '@f1/rule-engine';
 import { askAgent } from '../mcp/agent';
 import { generateDsoEmail } from '../mcp/dso-email';
 import { TOPIC_TO_FILENAME } from '../rules/topics';
@@ -494,5 +499,58 @@ export function registerRoutes(fastify: FastifyInstance): void {
   fastify.get('/news', async (_request, reply) => {
     const result = await fetchImmigrationNews(10);
     return reply.send(result);
+  });
+
+  // --- Synthetic cohort endpoints ---
+
+  // GET /students — list all synthetic students with latest rule evaluation
+  fastify.get('/students', async (_request, reply) => {
+    const students = getAllStudents();
+    const todayIso = new Date().toISOString().slice(0, 10);
+
+    const cohort = students.map(student => {
+      const context = getRuleContextForStudent(student.id);
+      const results = evaluateAllRules(student, context, todayIso);
+      const activeFlags = results.filter(r => r.status === 'violation' || r.status === 'warning');
+
+      return {
+        student,
+        ruleResults: results,
+        summary: {
+          violations: activeFlags.filter(r => r.status === 'violation').length,
+          warnings: activeFlags.filter(r => r.status === 'warning').length,
+          highestSeverity: activeFlags.some(r => r.status === 'violation')
+            ? 'violation'
+            : activeFlags.some(r => r.status === 'warning')
+            ? 'warning'
+            : 'pass',
+        },
+      };
+    });
+
+    return reply.send(cohort);
+  });
+
+  // GET /students/:id/audit — full audit trail for a synthetic student
+  fastify.get<{ Params: { id: string } }>('/students/:id/audit', async (request, reply) => {
+    const { id } = request.params;
+    const student = getStudentById(id);
+    if (!student) return reply.status(404).send({ error: `Student not found: ${id}` });
+
+    const trail = getAuditTrailForStudent(id);
+    return reply.send({ student, trail });
+  });
+
+  // GET /students/:id — single synthetic student with live rule evaluation
+  fastify.get<{ Params: { id: string } }>('/students/:id', async (request, reply) => {
+    const { id } = request.params;
+    const student = getStudentById(id);
+    if (!student) return reply.status(404).send({ error: `Student not found: ${id}` });
+
+    const todayIso = new Date().toISOString().slice(0, 10);
+    const context = getRuleContextForStudent(id);
+    const results = evaluateAllRules(student, context, todayIso);
+
+    return reply.send({ student, ruleResults: results });
   });
 }

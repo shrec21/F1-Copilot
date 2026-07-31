@@ -465,3 +465,74 @@ export async function postDsoEmail(data: DsoEmailInput): Promise<{ email: string
   }
   return res.json();
 }
+
+// --- Synthetic Cohort ---
+
+export interface CohortRuleResult {
+  rule: {
+    id: string;
+    version: number;
+    title: string;
+    sourceCitation: string;
+    effectiveDate: string;
+    supersedes: string | null;
+  };
+  studentId: string;
+  status: 'pass' | 'warning' | 'violation' | 'not-applicable';
+  computedAt: string;
+  inputs: Record<string, unknown>;
+  outputs: Record<string, unknown>;
+  message: string;
+}
+
+export interface CohortStudent {
+  student: {
+    id: string;
+    fullName: string;
+    sevisId: string;
+    programLevel: string;
+    major: string;
+    isStemDesignated: boolean;
+    programStartDate: string;
+    programEndDate: string;
+    admissionType: string;
+    i94AdmissionDate: string;
+    i94ExpiryDate: string | null;
+  };
+  ruleResults: CohortRuleResult[];
+  summary: {
+    violations: number;
+    warnings: number;
+    highestSeverity: 'pass' | 'warning' | 'violation';
+  };
+}
+
+export interface AuditTrailEntry {
+  id: string;
+  studentId: string;
+  eventId: string;
+  ruleId: string;
+  ruleVersion: number;
+  status: string;
+  inputsJson: string;
+  outputsJson: string;
+  sourceCitation: string;
+  message: string;
+  createdAt: string;
+  eventType: string;
+  occurredAt: string;
+}
+
+export async function getCohort(): Promise<CohortStudent[]> {
+  const res = await fetch(`${BASE}/students`);
+  if (!res.ok) throw new Error(res.statusText);
+  return res.json();
+}
+
+export async function getStudentAudit(
+  studentId: string,
+): Promise<{ student: CohortStudent['student']; trail: AuditTrailEntry[] }> {
+  const res = await fetch(`${BASE}/students/${encodeURIComponent(studentId)}/audit`);
+  if (!res.ok) throw new Error(res.statusText);
+  return res.json();
+}

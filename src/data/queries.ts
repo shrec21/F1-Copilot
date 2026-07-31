@@ -232,6 +232,203 @@ export function upsertDocumentStatus(
   `).run(docId, status, notes, updatedAt);
 }
 
+// --- Synthetic cohort queries ---
+
+import type { Student, EmploymentPeriod, AuthorizationPeriod, RuleContext } from '@f1/rule-engine';
+
+export function insertStudent(s: Student): void {
+  db.prepare(`
+    INSERT OR REPLACE INTO students
+      (id, full_name, sevis_id, program_level, major, is_stem_designated,
+       program_start_date, program_end_date, admission_type, i94_admission_date, i94_expiry_date)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `).run(
+    s.id, s.fullName, s.sevisId, s.programLevel, s.major,
+    s.isStemDesignated ? 1 : 0,
+    s.programStartDate, s.programEndDate, s.admissionType,
+    s.i94AdmissionDate, s.i94ExpiryDate ?? null,
+  );
+}
+
+export function getAllStudents(): Student[] {
+  const rows = db.prepare('SELECT * FROM students ORDER BY full_name').all() as Array<{
+    id: string; full_name: string; sevis_id: string; program_level: string;
+    major: string; is_stem_designated: number; program_start_date: string;
+    program_end_date: string; admission_type: string; i94_admission_date: string;
+    i94_expiry_date: string | null;
+  }>;
+  return rows.map(r => ({
+    id: r.id, fullName: r.full_name, sevisId: r.sevis_id,
+    programLevel: r.program_level as Student['programLevel'],
+    major: r.major, isStemDesignated: r.is_stem_designated === 1,
+    programStartDate: r.program_start_date, programEndDate: r.program_end_date,
+    admissionType: r.admission_type as Student['admissionType'],
+    i94AdmissionDate: r.i94_admission_date, i94ExpiryDate: r.i94_expiry_date,
+  }));
+}
+
+export function getStudentById(id: string): Student | null {
+  const r = db.prepare('SELECT * FROM students WHERE id = ?').get(id) as {
+    id: string; full_name: string; sevis_id: string; program_level: string;
+    major: string; is_stem_designated: number; program_start_date: string;
+    program_end_date: string; admission_type: string; i94_admission_date: string;
+    i94_expiry_date: string | null;
+  } | undefined;
+  if (!r) return null;
+  return {
+    id: r.id, fullName: r.full_name, sevisId: r.sevis_id,
+    programLevel: r.program_level as Student['programLevel'],
+    major: r.major, isStemDesignated: r.is_stem_designated === 1,
+    programStartDate: r.program_start_date, programEndDate: r.program_end_date,
+    admissionType: r.admission_type as Student['admissionType'],
+    i94AdmissionDate: r.i94_admission_date, i94ExpiryDate: r.i94_expiry_date,
+  };
+}
+
+export function insertStudentEmployment(studentId: string, ep: EmploymentPeriod): void {
+  db.prepare(`
+    INSERT OR REPLACE INTO student_employment
+      (id, student_id, auth_type, employer, hours_per_week, start_date, end_date, cpt_type, employer_everify_enrolled)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `).run(
+    ep.id, studentId, ep.authType, ep.employer, ep.hoursPerWeek,
+    ep.startDate, ep.endDate ?? null, ep.cptType ?? null,
+    ep.employerEverifyEnrolled === undefined ? null : ep.employerEverifyEnrolled ? 1 : 0,
+  );
+}
+
+export function insertStudentAuthorization(studentId: string, a: AuthorizationPeriod): void {
+  db.prepare(`
+    INSERT OR REPLACE INTO student_authorizations
+      (id, student_id, auth_type, employer, start_date, end_date)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `).run(a.id, studentId, a.authType, a.employer ?? null, a.startDate, a.endDate);
+}
+
+export function insertStudentI983Submission(studentId: string, submittedAt: string): void {
+  const id = `${studentId}-i983-${submittedAt}`;
+  db.prepare(`
+    INSERT OR IGNORE INTO student_i983_submissions (id, student_id, submitted_at)
+    VALUES (?, ?, ?)
+  `).run(id, studentId, submittedAt);
+}
+
+export function getRuleContextForStudent(studentId: string): RuleContext {
+  const empRows = db.prepare(
+    'SELECT * FROM student_employment WHERE student_id = ? ORDER BY start_date',
+  ).all(studentId) as Array<{
+    id: string; auth_type: string; employer: string; hours_per_week: number;
+    start_date: string; end_date: string | null; cpt_type: string | null;
+    employer_everify_enrolled: number | null;
+  }>;
+
+  const authRows = db.prepare(
+    'SELECT * FROM student_authorizations WHERE student_id = ? ORDER BY start_date',
+  ).all(studentId) as Array<{
+    id: string; auth_type: string; employer: string | null; start_date: string; end_date: string;
+  }>;
+
+  const i983Rows = db.prepare(
+    'SELECT submitted_at FROM student_i983_submissions WHERE student_id = ? ORDER BY submitted_at',
+  ).all(studentId) as Array<{ submitted_at: string }>;
+
+  return {
+    employmentPeriods: empRows.map(r => ({
+      id: r.id,
+      authType: r.auth_type as EmploymentPeriod['authType'],
+      employer: r.employer,
+      hoursPerWeek: r.hours_per_week,
+      startDate: r.start_date,
+      endDate: r.end_date,
+      cptType: (r.cpt_type ?? undefined) as EmploymentPeriod['cptType'],
+      employerEverifyEnrolled:
+        r.employer_everify_enrolled === null ? undefined : r.employer_everify_enrolled === 1,
+    })),
+    authorizations: authRows.map(r => ({
+      id: r.id,
+      authType: r.auth_type as AuthorizationPeriod['authType'],
+      employer: r.employer ?? undefined,
+      startDate: r.start_date,
+      endDate: r.end_date,
+    })),
+    stemI983Submissions: i983Rows.map(r => r.submitted_at),
+  };
+}
+
+// --- Outbox + audit trail ---
+
+export function insertOutboxEvent(event: {
+  id: string; type: string; studentId: string; payload: Record<string, unknown>; createdAt: string;
+}): void {
+  db.prepare(`
+    INSERT INTO outbox_events (id, type, student_id, payload, created_at)
+    VALUES (?, ?, ?, ?, ?)
+  `).run(event.id, event.type, event.studentId, JSON.stringify(event.payload), event.createdAt);
+}
+
+export function getUndispatchedEvents(limit = 20): Array<{
+  id: string; type: string; studentId: string; payload: string; createdAt: string;
+}> {
+  return db.prepare(
+    'SELECT id, type, student_id AS studentId, payload, created_at AS createdAt FROM outbox_events WHERE dispatched = 0 ORDER BY created_at LIMIT ?',
+  ).all(limit) as Array<{ id: string; type: string; studentId: string; payload: string; createdAt: string }>;
+}
+
+export function markEventDispatched(id: string, dispatchedAt: string): void {
+  db.prepare(
+    'UPDATE outbox_events SET dispatched = 1, dispatched_at = ? WHERE id = ?',
+  ).run(dispatchedAt, id);
+}
+
+export function insertComplianceEvent(event: {
+  id: string; type: string; studentId: string; occurredAt: string; payload: Record<string, unknown>;
+}): void {
+  db.prepare(`
+    INSERT INTO compliance_events (id, type, student_id, occurred_at, payload)
+    VALUES (?, ?, ?, ?, ?)
+  `).run(event.id, event.type, event.studentId, event.occurredAt, JSON.stringify(event.payload));
+}
+
+export function insertAuditEntry(entry: {
+  id: string; studentId: string; eventId: string;
+  ruleId: string; ruleVersion: number; status: string;
+  inputsJson: string; outputsJson: string; sourceCitation: string; message: string; createdAt: string;
+}): void {
+  db.prepare(`
+    INSERT INTO audit_trail
+      (id, student_id, event_id, rule_id, rule_version, status,
+       inputs_json, outputs_json, source_citation, message, created_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `).run(
+    entry.id, entry.studentId, entry.eventId, entry.ruleId, entry.ruleVersion,
+    entry.status, entry.inputsJson, entry.outputsJson, entry.sourceCitation,
+    entry.message, entry.createdAt,
+  );
+}
+
+export function getAuditTrailForStudent(studentId: string): Array<{
+  id: string; studentId: string; eventId: string; ruleId: string; ruleVersion: number;
+  status: string; inputsJson: string; outputsJson: string; sourceCitation: string;
+  message: string; createdAt: string; eventType: string; occurredAt: string;
+}> {
+  return db.prepare(`
+    SELECT
+      a.id, a.student_id AS studentId, a.event_id AS eventId, a.rule_id AS ruleId,
+      a.rule_version AS ruleVersion, a.status, a.inputs_json AS inputsJson,
+      a.outputs_json AS outputsJson, a.source_citation AS sourceCitation,
+      a.message, a.created_at AS createdAt,
+      e.type AS eventType, e.occurred_at AS occurredAt
+    FROM audit_trail a
+    JOIN compliance_events e ON e.id = a.event_id
+    WHERE a.student_id = ?
+    ORDER BY a.created_at DESC
+  `).all(studentId) as Array<{
+    id: string; studentId: string; eventId: string; ruleId: string; ruleVersion: number;
+    status: string; inputsJson: string; outputsJson: string; sourceCitation: string;
+    message: string; createdAt: string; eventType: string; occurredAt: string;
+  }>;
+}
+
 export function getOptWindow(): DateRange | null {
   const row = db.prepare(`
     SELECT start_date, end_date FROM authorizations

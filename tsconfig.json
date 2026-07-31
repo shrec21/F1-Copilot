@@ -5,7 +5,10 @@
     "strict": true,
     "esModuleInterop": true,
     "outDir": "dist",
-    "rootDir": "src"
+    "rootDir": "src",
+    "paths": {
+      "@f1/rule-engine": ["./packages/rule-engine/src/index.ts"]
+    }
   },
   "include": ["src/**/*", "tests/**/*"]
 }
