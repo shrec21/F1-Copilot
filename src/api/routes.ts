@@ -7,6 +7,7 @@ import { checkDsTransitionStatus } from '../engine/ds-transition';
 import { computeAlerts } from '../engine/alert-engine';
 import { computeDeadlines } from '../engine/deadline-engine';
 import { computeActionPlan } from '../engine/action-plan-engine';
+import { DOCUMENT_LIST } from '../engine/document-checklist-engine';
 import {
   upsertUserProfile,
   getUserProfile,
@@ -19,6 +20,8 @@ import {
   getAllAuthorizations,
   getActionStepCompletions,
   toggleActionStep,
+  getAllDocumentStatuses,
+  upsertDocumentStatus,
 } from '../data/queries';
 import { askAgent } from '../mcp/agent';
 import { generateDsoEmail } from '../mcp/dso-email';
@@ -378,6 +381,42 @@ export function registerRoutes(fastify: FastifyInstance): void {
     }));
 
     return reply.send(stepsWithCompletion);
+  });
+
+  // GET /documents — canonical document list merged with user's tracked status
+  fastify.get('/documents', async (_request, reply) => {
+    const statuses = getAllDocumentStatuses();
+    const result = DOCUMENT_LIST.map(doc => ({
+      ...doc,
+      status: statuses[doc.id]?.status ?? 'not-started',
+      notes: statuses[doc.id]?.notes ?? null,
+      updatedAt: statuses[doc.id]?.updatedAt ?? null,
+    }));
+    return reply.send(result);
+  });
+
+  // POST /documents/:id — update status and/or notes for a document
+  fastify.post<{ Params: { id: string } }>('/documents/:id', async (request, reply) => {
+    const { id } = request.params;
+
+    const validDoc = DOCUMENT_LIST.find(d => d.id === id);
+    if (!validDoc) return reply.status(404).send({ error: `Unknown document id: ${id}` });
+
+    const body = request.body as { status?: unknown; notes?: unknown };
+    const validStatuses = ['not-started', 'located', 'scanned', 'submitted'];
+
+    if (body.status !== undefined && !validStatuses.includes(body.status as string)) {
+      return reply.status(400).send({ error: `status must be one of: ${validStatuses.join(', ')}` });
+    }
+
+    const currentStatuses = getAllDocumentStatuses();
+    const current = currentStatuses[id];
+    const newStatus = (body.status as 'not-started' | 'located' | 'scanned' | 'submitted') ?? current?.status ?? 'not-started';
+    const newNotes = typeof body.notes === 'string' ? body.notes : (current?.notes ?? null);
+    const updatedAt = new Date().toISOString();
+
+    upsertDocumentStatus(id, newStatus, newNotes, updatedAt);
+    return reply.send({ ok: true });
   });
 
   // POST /action-plan/:id/toggle — mark a step complete or incomplete

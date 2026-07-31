@@ -12,14 +12,16 @@ import { SimulatorTab } from './components/SimulatorTab';
 import { DsoEmailTab } from './components/DsoEmailTab';
 import { TimelineTab } from './components/TimelineTab';
 import { ActionPlanTab } from './components/ActionPlanTab';
+import { DocumentChecklist } from './components/DocumentChecklist';
 
-type Tab = 'dashboard' | 'profile' | 'employment' | 'chat' | 'rules' | 'news' | 'simulator' | 'dso-email' | 'timeline' | 'action-plan';
+type Tab = 'dashboard' | 'profile' | 'employment' | 'chat' | 'rules' | 'news' | 'simulator' | 'dso-email' | 'timeline' | 'action-plan' | 'documents';
 
 const TABS: { id: Tab; label: string }[] = [
   { id: 'dashboard', label: 'Dashboard' },
   { id: 'profile', label: 'Profile' },
   { id: 'employment', label: 'Log Employment' },
   { id: 'action-plan', label: 'Action Plan' },
+  { id: 'documents', label: 'Documents' },
   { id: 'simulator', label: 'Simulator' },
   { id: 'dso-email', label: 'DSO Email' },
   { id: 'timeline', label: 'Timeline' },
@@ -77,6 +79,7 @@ function App() {
         )}
         {activeTab === 'employment' && <LogEmploymentForm />}
         {activeTab === 'action-plan' && <ActionPlanTab />}
+        {activeTab === 'documents' && <DocumentChecklist />}
         {activeTab === 'simulator' && <SimulatorTab />}
         {activeTab === 'dso-email' && <DsoEmailTab />}
         {activeTab === 'timeline' && <TimelineTab />}

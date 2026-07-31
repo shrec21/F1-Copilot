@@ -190,6 +190,48 @@ export function toggleActionStep(stepId: string, completed: boolean, completedAt
   `).run(stepId, completed ? 1 : 0, completedAt);
 }
 
+export interface DocumentStatusRow {
+  docId: string;
+  status: 'not-started' | 'located' | 'scanned' | 'submitted';
+  notes: string | null;
+  updatedAt: string | null;
+}
+
+export function getAllDocumentStatuses(): Record<string, DocumentStatusRow> {
+  const rows = db.prepare('SELECT doc_id, status, notes, updated_at FROM document_statuses').all() as Array<{
+    doc_id: string;
+    status: string;
+    notes: string | null;
+    updated_at: string | null;
+  }>;
+  const result: Record<string, DocumentStatusRow> = {};
+  for (const row of rows) {
+    result[row.doc_id] = {
+      docId: row.doc_id,
+      status: row.status as DocumentStatusRow['status'],
+      notes: row.notes,
+      updatedAt: row.updated_at,
+    };
+  }
+  return result;
+}
+
+export function upsertDocumentStatus(
+  docId: string,
+  status: 'not-started' | 'located' | 'scanned' | 'submitted',
+  notes: string | null,
+  updatedAt: string,
+): void {
+  db.prepare(`
+    INSERT INTO document_statuses (doc_id, status, notes, updated_at)
+    VALUES (?, ?, ?, ?)
+    ON CONFLICT(doc_id) DO UPDATE SET
+      status = excluded.status,
+      notes = excluded.notes,
+      updated_at = excluded.updated_at
+  `).run(docId, status, notes, updatedAt);
+}
+
 export function getOptWindow(): DateRange | null {
   const row = db.prepare(`
     SELECT start_date, end_date FROM authorizations

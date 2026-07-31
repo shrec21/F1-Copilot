@@ -69,5 +69,12 @@ export function initDb(): void {
       completed    INTEGER NOT NULL DEFAULT 0,  -- 0/1 boolean
       completed_at TEXT                         -- ISO 8601 | NULL
     );
+
+    CREATE TABLE IF NOT EXISTS document_statuses (
+      doc_id      TEXT PRIMARY KEY,
+      status      TEXT NOT NULL DEFAULT 'not-started',  -- 'not-started'|'located'|'scanned'|'submitted'
+      notes       TEXT,                                  -- free-text notes from the student
+      updated_at  TEXT                                   -- ISO 8601 timestamp
+    );
   `);
 }

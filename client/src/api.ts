@@ -287,6 +287,42 @@ export async function postSimulate(data: SimulateInput): Promise<StatusResponse>
   return res.json();
 }
 
+export type DocumentStatus = 'not-started' | 'located' | 'scanned' | 'submitted';
+
+export interface DocumentItem {
+  id: string;
+  order: number;
+  category: 'identity' | 'immigration' | 'academic' | 'employment' | 'financial';
+  name: string;
+  description: string;
+  whyNeeded: string;
+  requiredForDsTransition: boolean;
+  conditional?: string;
+  resource?: { label: string; url: string };
+  // merged from DB
+  status: DocumentStatus;
+  notes: string | null;
+  updatedAt: string | null;
+}
+
+export async function getDocuments(): Promise<DocumentItem[]> {
+  const res = await fetch(`${BASE}/documents`);
+  if (!res.ok) throw new Error(res.statusText);
+  return res.json();
+}
+
+export async function updateDocument(id: string, patch: { status?: DocumentStatus; notes?: string }): Promise<void> {
+  const res = await fetch(`${BASE}/documents/${encodeURIComponent(id)}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(patch),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ message: res.statusText }));
+    throw new Error((err as { message?: string }).message || res.statusText);
+  }
+}
+
 export interface ActionStep {
   id: string;
   order: number;
