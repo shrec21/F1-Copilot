@@ -10,6 +10,7 @@ import { computeActionPlan } from '../engine/action-plan-engine';
 import { DOCUMENT_LIST } from '../engine/document-checklist-engine';
 import { SCENARIOS, detectScenario } from '../engine/scenario-engine';
 import { computeFilingWindows } from '../engine/filing-calculator-engine';
+import { computeRiskModel } from '../engine/risk-model-engine';
 import {
   upsertUserProfile,
   getUserProfile,
@@ -434,6 +435,17 @@ export function registerRoutes(fastify: FastifyInstance): void {
     const completedAt = body.completed ? new Date().toISOString().slice(0, 10) : null;
     toggleActionStep(id, body.completed, completedAt);
     return reply.send({ ok: true });
+  });
+
+  // GET /risk-model — personalized consequence cascade for each missed deadline
+  fastify.get('/risk-model', async (_request, reply) => {
+    const profile = getUserProfile();
+    if (!profile) return reply.status(404).send({ error: 'Profile not set. POST /profile first.' });
+
+    const optWindow = getOptWindow();
+    const todayIso  = new Date().toISOString().slice(0, 10);
+    const risks     = computeRiskModel(profile, optWindow, todayIso);
+    return reply.send(risks);
   });
 
   // GET /filing-windows — computed filing deadlines for the student's situation

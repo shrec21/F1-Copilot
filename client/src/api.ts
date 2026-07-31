@@ -287,6 +287,39 @@ export async function postSimulate(data: SimulateInput): Promise<StatusResponse>
   return res.json();
 }
 
+// --- Risk Model ---
+
+export type ConsequenceSeverity = 'caution' | 'serious' | 'severe' | 'critical';
+
+export interface ConsequenceTier {
+  trigger: string;
+  date: string;
+  daysFromNow: number;
+  title: string;
+  detail: string;
+  severity: ConsequenceSeverity;
+  alreadyActive: boolean;
+}
+
+export interface RiskEntry {
+  id: string;
+  deadlineTitle: string;
+  deadlineDate: string;
+  daysUntilDeadline: number;
+  deadlineMissed: boolean;
+  summary: string;
+  consequences: ConsequenceTier[];
+  citations: string[];
+  disclaimer: string;
+}
+
+export async function getRiskModel(): Promise<RiskEntry[]> {
+  const res = await fetch(`${BASE}/risk-model`);
+  if (res.status === 404) return [];
+  if (!res.ok) throw new Error(res.statusText);
+  return res.json();
+}
+
 // --- Filing Deadline Calculator ---
 
 export type FilingStatus = 'upcoming' | 'open' | 'expiring' | 'closed' | 'not-applicable';
