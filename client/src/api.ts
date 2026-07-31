@@ -287,6 +287,42 @@ export async function postSimulate(data: SimulateInput): Promise<StatusResponse>
   return res.json();
 }
 
+// --- Scenario Explainer ---
+
+export type ScenarioId =
+  | 'new-admission-post-sept15'
+  | 'fixed-date-pre-transition'
+  | 'ds-staying'
+  | 'ds-travel-before-sept15'
+  | 'ds-travel-after-sept15'
+  | 'ds-deadline-passed';
+
+export type OutcomeSeverity = 'safe' | 'action-required' | 'critical' | 'info';
+
+export interface Scenario {
+  id: ScenarioId;
+  title: string;
+  subtitle: string;
+  outcome: string;
+  outcomeSeverity: OutcomeSeverity;
+  keyFacts: string[];
+  risks: { title: string; detail: string }[];
+  actions: { order: number; text: string; deadline?: string }[];
+  citations: string[];
+  appliesWhen: string;
+}
+
+export interface ScenariosResponse {
+  scenarios: Scenario[];
+  detectedId: ScenarioId | null;
+}
+
+export async function getScenarios(): Promise<ScenariosResponse> {
+  const res = await fetch(`${BASE}/scenarios`);
+  if (!res.ok) throw new Error(res.statusText);
+  return res.json();
+}
+
 export type DocumentStatus = 'not-started' | 'located' | 'scanned' | 'submitted';
 
 export interface DocumentItem {

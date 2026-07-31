@@ -8,6 +8,7 @@ import { computeAlerts } from '../engine/alert-engine';
 import { computeDeadlines } from '../engine/deadline-engine';
 import { computeActionPlan } from '../engine/action-plan-engine';
 import { DOCUMENT_LIST } from '../engine/document-checklist-engine';
+import { SCENARIOS, detectScenario } from '../engine/scenario-engine';
 import {
   upsertUserProfile,
   getUserProfile,
@@ -432,6 +433,18 @@ export function registerRoutes(fastify: FastifyInstance): void {
     const completedAt = body.completed ? new Date().toISOString().slice(0, 10) : null;
     toggleActionStep(id, body.completed, completedAt);
     return reply.send({ ok: true });
+  });
+
+  // GET /scenarios — D/S transition scenario matrix + detected scenario for user
+  fastify.get('/scenarios', async (_request, reply) => {
+    const profile = getUserProfile();
+    const todayIso = new Date().toISOString().slice(0, 10);
+
+    const detectedId = profile
+      ? detectScenario(profile.admissionDate, profile.visaAdmissionType, todayIso)
+      : null;
+
+    return reply.send({ scenarios: SCENARIOS, detectedId });
   });
 
   // GET /rules/:topic — return rule text for a topic
