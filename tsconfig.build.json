@@ -1,5 +1,9 @@
 {
-  "_comment": "This file exists because tsconfig.json includes tests/**/* for IDE support and type-checking, but sets rootDir to src, which causes tsc to error when tests/ is outside rootDir. This build config extends tsconfig.json and restricts include to src/**/* only so that `tsc -p tsconfig.build.json` (the build script) compiles cleanly without touching test files.",
+  "_comment": "Build config for the Fastify backend. rootDir=src keeps the dist/ layout flat (dist/index.js, not dist/src/index.js). The @f1/rule-engine import resolves via the npm workspace symlink in node_modules/ — the rule-engine package must be compiled before running this build (see 'build' script in package.json).",
   "extends": "./tsconfig.json",
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "compilerOptions": {
+    "rootDir": "src",
+    "paths": {}
+  }
 }

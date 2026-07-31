@@ -202,3 +202,337 @@ export async function getNews(): Promise<NewsFetchResult> {
   if (!res.ok) throw new Error(res.statusText);
   return res.json();
 }
+
+// --- New types & functions for wow features ---
+
+export interface Alert {
+  id: string;
+  severity: 'critical' | 'warning' | 'info';
+  title: string;
+  description: string;
+  deadline?: string;
+  daysUntil?: number;
+  ruleId: string;
+  action: string;
+}
+
+export interface Deadline {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  daysUntil: number;
+  severity: 'critical' | 'warning' | 'info' | 'past';
+  ruleId: string;
+  citation: string;
+}
+
+export interface AuthorizationRecord {
+  id: string;
+  authType: 'CPT' | 'OPT' | 'STEM-OPT';
+  employer?: string;
+  startDate: string;
+  endDate: string;
+}
+
+export type DsoEmailType = 'cpt-request' | 'opt-question' | 'stem-extension' | 'general-inquiry';
+
+export interface DsoEmailInput {
+  emailType: DsoEmailType;
+  additionalContext?: string;
+}
+
+export interface SimulateInput {
+  roles: Array<{
+    employer: string;
+    authType: 'CPT' | 'OPT' | 'STEM-OPT';
+    cptType?: 'full-time' | 'part-time';
+    hoursPerWeek: number;
+    startDate: string;
+    endDate?: string;
+  }>;
+  optWindow?: { start: string; end?: string };
+}
+
+export async function getAlerts(): Promise<Alert[]> {
+  const res = await fetch(`${BASE}/alerts`);
+  if (res.status === 404) return [];
+  if (!res.ok) throw new Error(res.statusText);
+  return res.json();
+}
+
+export async function getDeadlines(): Promise<Deadline[]> {
+  const res = await fetch(`${BASE}/deadlines`);
+  if (res.status === 404) return [];
+  if (!res.ok) throw new Error(res.statusText);
+  return res.json();
+}
+
+export async function getAuthorizations(): Promise<AuthorizationRecord[]> {
+  const res = await fetch(`${BASE}/authorizations`);
+  if (!res.ok) throw new Error(res.statusText);
+  return res.json();
+}
+
+export async function postSimulate(data: SimulateInput): Promise<StatusResponse> {
+  const res = await fetch(`${BASE}/simulate`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ message: res.statusText }));
+    throw new Error((err as { message?: string }).message || res.statusText);
+  }
+  return res.json();
+}
+
+// --- Risk Model ---
+
+export type ConsequenceSeverity = 'caution' | 'serious' | 'severe' | 'critical';
+
+export interface ConsequenceTier {
+  trigger: string;
+  date: string;
+  daysFromNow: number;
+  title: string;
+  detail: string;
+  severity: ConsequenceSeverity;
+  alreadyActive: boolean;
+}
+
+export interface RiskEntry {
+  id: string;
+  deadlineTitle: string;
+  deadlineDate: string;
+  daysUntilDeadline: number;
+  deadlineMissed: boolean;
+  summary: string;
+  consequences: ConsequenceTier[];
+  citations: string[];
+  disclaimer: string;
+}
+
+export async function getRiskModel(): Promise<RiskEntry[]> {
+  const res = await fetch(`${BASE}/risk-model`);
+  if (res.status === 404) return [];
+  if (!res.ok) throw new Error(res.statusText);
+  return res.json();
+}
+
+// --- Filing Deadline Calculator ---
+
+export type FilingStatus = 'upcoming' | 'open' | 'expiring' | 'closed' | 'not-applicable';
+
+export interface FilingWindow {
+  id: string;
+  order: number;
+  title: string;
+  description: string;
+  windowOpens: string;
+  hardDeadline: string;
+  daysUntilDeadline: number;
+  daysUntilOpen: number;
+  status: FilingStatus;
+  form?: string;
+  filingEntity: 'USCIS' | 'DSO' | 'CBP' | 'N/A';
+  keySteps: string[];
+  citation: string;
+  note?: string;
+}
+
+export async function getFilingWindows(): Promise<FilingWindow[]> {
+  const res = await fetch(`${BASE}/filing-windows`);
+  if (res.status === 404) return [];
+  if (!res.ok) throw new Error(res.statusText);
+  return res.json();
+}
+
+// --- Scenario Explainer ---
+
+export type ScenarioId =
+  | 'new-admission-post-sept15'
+  | 'fixed-date-pre-transition'
+  | 'ds-staying'
+  | 'ds-travel-before-sept15'
+  | 'ds-travel-after-sept15'
+  | 'ds-deadline-passed';
+
+export type OutcomeSeverity = 'safe' | 'action-required' | 'critical' | 'info';
+
+export interface Scenario {
+  id: ScenarioId;
+  title: string;
+  subtitle: string;
+  outcome: string;
+  outcomeSeverity: OutcomeSeverity;
+  keyFacts: string[];
+  risks: { title: string; detail: string }[];
+  actions: { order: number; text: string; deadline?: string }[];
+  citations: string[];
+  appliesWhen: string;
+}
+
+export interface ScenariosResponse {
+  scenarios: Scenario[];
+  detectedId: ScenarioId | null;
+}
+
+export async function getScenarios(): Promise<ScenariosResponse> {
+  const res = await fetch(`${BASE}/scenarios`);
+  if (!res.ok) throw new Error(res.statusText);
+  return res.json();
+}
+
+export type DocumentStatus = 'not-started' | 'located' | 'scanned' | 'submitted';
+
+export interface DocumentItem {
+  id: string;
+  order: number;
+  category: 'identity' | 'immigration' | 'academic' | 'employment' | 'financial';
+  name: string;
+  description: string;
+  whyNeeded: string;
+  requiredForDsTransition: boolean;
+  conditional?: string;
+  resource?: { label: string; url: string };
+  // merged from DB
+  status: DocumentStatus;
+  notes: string | null;
+  updatedAt: string | null;
+}
+
+export async function getDocuments(): Promise<DocumentItem[]> {
+  const res = await fetch(`${BASE}/documents`);
+  if (!res.ok) throw new Error(res.statusText);
+  return res.json();
+}
+
+export async function updateDocument(id: string, patch: { status?: DocumentStatus; notes?: string }): Promise<void> {
+  const res = await fetch(`${BASE}/documents/${encodeURIComponent(id)}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(patch),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ message: res.statusText }));
+    throw new Error((err as { message?: string }).message || res.statusText);
+  }
+}
+
+export interface ActionStep {
+  id: string;
+  order: number;
+  category: 'verify' | 'contact' | 'document' | 'file' | 'track' | 'plan';
+  priority: 'critical' | 'high' | 'medium' | 'low';
+  title: string;
+  description: string;
+  deadline?: string;
+  daysUntil?: number;
+  citation?: string;
+  resources: { label: string; url: string }[];
+  completed: boolean;
+}
+
+export async function getActionPlan(): Promise<ActionStep[]> {
+  const res = await fetch(`${BASE}/action-plan`);
+  if (res.status === 404) return [];
+  if (!res.ok) throw new Error(res.statusText);
+  return res.json();
+}
+
+export async function toggleActionStep(id: string, completed: boolean): Promise<void> {
+  const res = await fetch(`${BASE}/action-plan/${encodeURIComponent(id)}/toggle`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ completed }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ message: res.statusText }));
+    throw new Error((err as { message?: string }).message || res.statusText);
+  }
+}
+
+export async function postDsoEmail(data: DsoEmailInput): Promise<{ email: string }> {
+  const res = await fetch(`${BASE}/dso-email`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ message: res.statusText }));
+    throw new Error((err as { message?: string }).message || res.statusText);
+  }
+  return res.json();
+}
+
+// --- Synthetic Cohort ---
+
+export interface CohortRuleResult {
+  rule: {
+    id: string;
+    version: number;
+    title: string;
+    sourceCitation: string;
+    effectiveDate: string;
+    supersedes: string | null;
+  };
+  studentId: string;
+  status: 'pass' | 'warning' | 'violation' | 'not-applicable';
+  computedAt: string;
+  inputs: Record<string, unknown>;
+  outputs: Record<string, unknown>;
+  message: string;
+}
+
+export interface CohortStudent {
+  student: {
+    id: string;
+    fullName: string;
+    sevisId: string;
+    programLevel: string;
+    major: string;
+    isStemDesignated: boolean;
+    programStartDate: string;
+    programEndDate: string;
+    admissionType: string;
+    i94AdmissionDate: string;
+    i94ExpiryDate: string | null;
+  };
+  ruleResults: CohortRuleResult[];
+  summary: {
+    violations: number;
+    warnings: number;
+    highestSeverity: 'pass' | 'warning' | 'violation';
+  };
+}
+
+export interface AuditTrailEntry {
+  id: string;
+  studentId: string;
+  eventId: string;
+  ruleId: string;
+  ruleVersion: number;
+  status: string;
+  inputsJson: string;
+  outputsJson: string;
+  sourceCitation: string;
+  message: string;
+  createdAt: string;
+  eventType: string;
+  occurredAt: string;
+}
+
+export async function getCohort(): Promise<CohortStudent[]> {
+  const res = await fetch(`${BASE}/students`);
+  if (!res.ok) throw new Error(res.statusText);
+  return res.json();
+}
+
+export async function getStudentAudit(
+  studentId: string,
+): Promise<{ student: CohortStudent['student']; trail: AuditTrailEntry[] }> {
+  const res = await fetch(`${BASE}/students/${encodeURIComponent(studentId)}/audit`);
+  if (!res.ok) throw new Error(res.statusText);
+  return res.json();
+}
