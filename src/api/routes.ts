@@ -6,6 +6,7 @@ import { checkConcurrentEmploymentConflicts } from '../engine/concurrent-employm
 import { checkDsTransitionStatus } from '../engine/ds-transition';
 import { computeAlerts } from '../engine/alert-engine';
 import { computeDeadlines } from '../engine/deadline-engine';
+import { computeActionPlan } from '../engine/action-plan-engine';
 import {
   upsertUserProfile,
   getUserProfile,
@@ -16,6 +17,8 @@ import {
   insertAuthorization,
   getOptWindow,
   getAllAuthorizations,
+  getActionStepCompletions,
+  toggleActionStep,
 } from '../data/queries';
 import { askAgent } from '../mcp/agent';
 import { generateDsoEmail } from '../mcp/dso-email';
@@ -356,6 +359,40 @@ export function registerRoutes(fastify: FastifyInstance): void {
   fastify.get('/authorizations', async (_request, reply) => {
     const records = getAllAuthorizations();
     return reply.send(records);
+  });
+
+  // GET /action-plan — personalized D/S transition action plan with completion state
+  fastify.get('/action-plan', async (_request, reply) => {
+    const profile = getUserProfile();
+    if (!profile) return reply.status(404).send({ error: 'Profile not set. POST /profile first.' });
+
+    const roles = getAllEmploymentPeriods();
+    const { dsStatus } = computeFullStatus(profile, roles);
+    const todayIso = new Date().toISOString().slice(0, 10);
+    const steps = computeActionPlan(profile, dsStatus, todayIso);
+    const completions = getActionStepCompletions();
+
+    const stepsWithCompletion = steps.map(step => ({
+      ...step,
+      completed: completions[step.id] ?? false,
+    }));
+
+    return reply.send(stepsWithCompletion);
+  });
+
+  // POST /action-plan/:id/toggle — mark a step complete or incomplete
+  fastify.post<{ Params: { id: string } }>('/action-plan/:id/toggle', async (request, reply) => {
+    const { id } = request.params;
+    if (!id) return reply.status(400).send({ error: 'Step id is required' });
+
+    const body = request.body as { completed?: unknown };
+    if (typeof body.completed !== 'boolean') {
+      return reply.status(400).send({ error: 'completed (boolean) is required' });
+    }
+
+    const completedAt = body.completed ? new Date().toISOString().slice(0, 10) : null;
+    toggleActionStep(id, body.completed, completedAt);
+    return reply.send({ ok: true });
   });
 
   // GET /rules/:topic — return rule text for a topic

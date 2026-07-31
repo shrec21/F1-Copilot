@@ -11,13 +11,15 @@ import { DeadlineCountdown } from './components/DeadlineCountdown';
 import { SimulatorTab } from './components/SimulatorTab';
 import { DsoEmailTab } from './components/DsoEmailTab';
 import { TimelineTab } from './components/TimelineTab';
+import { ActionPlanTab } from './components/ActionPlanTab';
 
-type Tab = 'dashboard' | 'profile' | 'employment' | 'chat' | 'rules' | 'news' | 'simulator' | 'dso-email' | 'timeline';
+type Tab = 'dashboard' | 'profile' | 'employment' | 'chat' | 'rules' | 'news' | 'simulator' | 'dso-email' | 'timeline' | 'action-plan';
 
 const TABS: { id: Tab; label: string }[] = [
   { id: 'dashboard', label: 'Dashboard' },
   { id: 'profile', label: 'Profile' },
   { id: 'employment', label: 'Log Employment' },
+  { id: 'action-plan', label: 'Action Plan' },
   { id: 'simulator', label: 'Simulator' },
   { id: 'dso-email', label: 'DSO Email' },
   { id: 'timeline', label: 'Timeline' },
@@ -74,6 +76,7 @@ function App() {
           <ProfileSetupForm onFirstSave={() => setActiveTab('dashboard')} />
         )}
         {activeTab === 'employment' && <LogEmploymentForm />}
+        {activeTab === 'action-plan' && <ActionPlanTab />}
         {activeTab === 'simulator' && <SimulatorTab />}
         {activeTab === 'dso-email' && <DsoEmailTab />}
         {activeTab === 'timeline' && <TimelineTab />}

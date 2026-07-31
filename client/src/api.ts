@@ -287,6 +287,39 @@ export async function postSimulate(data: SimulateInput): Promise<StatusResponse>
   return res.json();
 }
 
+export interface ActionStep {
+  id: string;
+  order: number;
+  category: 'verify' | 'contact' | 'document' | 'file' | 'track' | 'plan';
+  priority: 'critical' | 'high' | 'medium' | 'low';
+  title: string;
+  description: string;
+  deadline?: string;
+  daysUntil?: number;
+  citation?: string;
+  resources: { label: string; url: string }[];
+  completed: boolean;
+}
+
+export async function getActionPlan(): Promise<ActionStep[]> {
+  const res = await fetch(`${BASE}/action-plan`);
+  if (res.status === 404) return [];
+  if (!res.ok) throw new Error(res.statusText);
+  return res.json();
+}
+
+export async function toggleActionStep(id: string, completed: boolean): Promise<void> {
+  const res = await fetch(`${BASE}/action-plan/${encodeURIComponent(id)}/toggle`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ completed }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ message: res.statusText }));
+    throw new Error((err as { message?: string }).message || res.statusText);
+  }
+}
+
 export async function postDsoEmail(data: DsoEmailInput): Promise<{ email: string }> {
   const res = await fetch(`${BASE}/dso-email`, {
     method: 'POST',

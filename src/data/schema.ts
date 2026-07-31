@@ -63,5 +63,11 @@ export function initDb(): void {
       start_date  TEXT NOT NULL,
       end_date    TEXT NOT NULL
     );
+
+    CREATE TABLE IF NOT EXISTS action_step_completions (
+      step_id      TEXT PRIMARY KEY,
+      completed    INTEGER NOT NULL DEFAULT 0,  -- 0/1 boolean
+      completed_at TEXT                         -- ISO 8601 | NULL
+    );
   `);
 }

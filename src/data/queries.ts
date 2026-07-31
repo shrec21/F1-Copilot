@@ -170,6 +170,26 @@ export function getAllAuthorizations(): AuthorizationRecord[] {
   }));
 }
 
+export function getActionStepCompletions(): Record<string, boolean> {
+  const rows = db.prepare('SELECT step_id, completed FROM action_step_completions').all() as Array<{
+    step_id: string;
+    completed: number;
+  }>;
+  const result: Record<string, boolean> = {};
+  for (const row of rows) {
+    result[row.step_id] = row.completed === 1;
+  }
+  return result;
+}
+
+export function toggleActionStep(stepId: string, completed: boolean, completedAt: string | null): void {
+  db.prepare(`
+    INSERT INTO action_step_completions (step_id, completed, completed_at)
+    VALUES (?, ?, ?)
+    ON CONFLICT(step_id) DO UPDATE SET completed = excluded.completed, completed_at = excluded.completed_at
+  `).run(stepId, completed ? 1 : 0, completedAt);
+}
+
 export function getOptWindow(): DateRange | null {
   const row = db.prepare(`
     SELECT start_date, end_date FROM authorizations
