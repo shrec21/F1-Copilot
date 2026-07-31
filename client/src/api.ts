@@ -287,6 +287,34 @@ export async function postSimulate(data: SimulateInput): Promise<StatusResponse>
   return res.json();
 }
 
+// --- Filing Deadline Calculator ---
+
+export type FilingStatus = 'upcoming' | 'open' | 'expiring' | 'closed' | 'not-applicable';
+
+export interface FilingWindow {
+  id: string;
+  order: number;
+  title: string;
+  description: string;
+  windowOpens: string;
+  hardDeadline: string;
+  daysUntilDeadline: number;
+  daysUntilOpen: number;
+  status: FilingStatus;
+  form?: string;
+  filingEntity: 'USCIS' | 'DSO' | 'CBP' | 'N/A';
+  keySteps: string[];
+  citation: string;
+  note?: string;
+}
+
+export async function getFilingWindows(): Promise<FilingWindow[]> {
+  const res = await fetch(`${BASE}/filing-windows`);
+  if (res.status === 404) return [];
+  if (!res.ok) throw new Error(res.statusText);
+  return res.json();
+}
+
 // --- Scenario Explainer ---
 
 export type ScenarioId =

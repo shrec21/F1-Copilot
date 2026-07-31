@@ -9,6 +9,7 @@ import { computeDeadlines } from '../engine/deadline-engine';
 import { computeActionPlan } from '../engine/action-plan-engine';
 import { DOCUMENT_LIST } from '../engine/document-checklist-engine';
 import { SCENARIOS, detectScenario } from '../engine/scenario-engine';
+import { computeFilingWindows } from '../engine/filing-calculator-engine';
 import {
   upsertUserProfile,
   getUserProfile,
@@ -433,6 +434,17 @@ export function registerRoutes(fastify: FastifyInstance): void {
     const completedAt = body.completed ? new Date().toISOString().slice(0, 10) : null;
     toggleActionStep(id, body.completed, completedAt);
     return reply.send({ ok: true });
+  });
+
+  // GET /filing-windows — computed filing deadlines for the student's situation
+  fastify.get('/filing-windows', async (_request, reply) => {
+    const profile = getUserProfile();
+    if (!profile) return reply.status(404).send({ error: 'Profile not set. POST /profile first.' });
+
+    const optWindow = getOptWindow();
+    const todayIso  = new Date().toISOString().slice(0, 10);
+    const windows   = computeFilingWindows(profile, optWindow, todayIso);
+    return reply.send(windows);
   });
 
   // GET /scenarios — D/S transition scenario matrix + detected scenario for user

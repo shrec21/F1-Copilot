@@ -14,8 +14,9 @@ import { TimelineTab } from './components/TimelineTab';
 import { ActionPlanTab } from './components/ActionPlanTab';
 import { DocumentChecklist } from './components/DocumentChecklist';
 import { ScenarioExplainer } from './components/ScenarioExplainer';
+import { FilingCalculator } from './components/FilingCalculator';
 
-type Tab = 'dashboard' | 'profile' | 'employment' | 'chat' | 'rules' | 'news' | 'simulator' | 'dso-email' | 'timeline' | 'action-plan' | 'documents' | 'scenarios';
+type Tab = 'dashboard' | 'profile' | 'employment' | 'chat' | 'rules' | 'news' | 'simulator' | 'dso-email' | 'timeline' | 'action-plan' | 'documents' | 'scenarios' | 'filing';
 
 const TABS: { id: Tab; label: string }[] = [
   { id: 'dashboard', label: 'Dashboard' },
@@ -24,6 +25,7 @@ const TABS: { id: Tab; label: string }[] = [
   { id: 'action-plan', label: 'Action Plan' },
   { id: 'documents', label: 'Documents' },
   { id: 'scenarios', label: 'Scenarios' },
+  { id: 'filing', label: 'Filing Windows' },
   { id: 'simulator', label: 'Simulator' },
   { id: 'dso-email', label: 'DSO Email' },
   { id: 'timeline', label: 'Timeline' },
@@ -83,6 +85,7 @@ function App() {
         {activeTab === 'action-plan' && <ActionPlanTab />}
         {activeTab === 'documents' && <DocumentChecklist />}
         {activeTab === 'scenarios' && <ScenarioExplainer />}
+        {activeTab === 'filing' && <FilingCalculator />}
         {activeTab === 'simulator' && <SimulatorTab />}
         {activeTab === 'dso-email' && <DsoEmailTab />}
         {activeTab === 'timeline' && <TimelineTab />}
