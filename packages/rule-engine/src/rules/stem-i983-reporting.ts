@@ -17,11 +17,14 @@ const WARNING_DAYS_BEFORE = 30;       // warn 30 days before due
  * Checks whether the student has submitted their annual Form I-983
  * self-evaluation to their DSO within the required 12-month cycle.
  *
- * Due dates:
- * - First report: 12 months after STEM OPT authorization start date
- * - Subsequent reports: 12 months after each prior submission
+ * Due dates are fixed from STEM-OPT start (not rolling from last submission):
+ * - First report: STEM start + 12 months (365 days)
+ * - Second (final) report: STEM start + 24 months (730 days)
  *
- * If no submissions are on record, the next due date is STEM start + 12 months.
+ * A report is considered required if its nominal due date falls within the
+ * STEM-OPT period or within the 10-day post-conclusion window per regulation:
+ * 8 CFR § 214.2(f)(10)(ii)(C)(8) — "within 10 days following the conclusion
+ * of each reporting period."
  */
 export function checkStemI983Reporting(
   student: Student,
@@ -56,21 +59,19 @@ export function checkStemI983Reporting(
   const submissions = [...context.stemI983Submissions].sort();
   const stemStart = stemAuth.startDate;
 
-  // Determine when the next report is due
-  let nextDueDate: string;
-  let lastSubmission: string | null = null;
+  // Due dates are fixed from STEM-OPT start date, not rolling from last submission.
+  // 8 CFR § 214.2(f)(10)(ii)(C)(8): annual evaluations at 12-month intervals
+  // anchored to the start of the STEM OPT period (SEVP guidance: first report
+  // at stemStart + 12 months, subsequent reports at stemStart + 24 months, etc.).
+  // A late submission does NOT advance the next deadline.
+  const nextDueDate = addDays(stemStart, (submissions.length + 1) * REPORTING_INTERVAL_DAYS);
+  const lastSubmission = submissions.length > 0 ? submissions[submissions.length - 1] : null;
 
-  if (submissions.length === 0) {
-    nextDueDate = addDays(stemStart, REPORTING_INTERVAL_DAYS);
-  } else {
-    lastSubmission = submissions[submissions.length - 1];
-    nextDueDate = addDays(lastSubmission, REPORTING_INTERVAL_DAYS);
-  }
-
-  // The next report is only required if its due date falls within the STEM-OPT period.
-  // If the due date is after STEM expiry, no report is needed.
+  // A report is required if its nominal due date falls within the STEM-OPT period or
+  // within the 10-day post-conclusion window allowed for final-assessment submission.
+  // (8 CFR § 214.2(f)(10)(ii)(C)(8): submit "within 10 days following the conclusion.")
   const reportRequiredByDueDate =
-    nextDueDate !== null && nextDueDate <= stemAuth.endDate;
+    nextDueDate !== null && nextDueDate <= addDays(stemAuth.endDate, 10);
 
   if (reportRequiredByDueDate) {
     const daysUntilDue = daysBetween(todayIso, nextDueDate);

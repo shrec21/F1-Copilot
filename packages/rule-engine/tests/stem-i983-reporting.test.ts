@@ -70,14 +70,16 @@ describe('checkStemI983Reporting', () => {
   });
 
   it('returns pass after first submission, before next deadline', () => {
+    // STEM start: 2025-05-10. Due dates anchored to STEM start (not submission date):
+    //   1st due: 2025-05-10 + 365 = 2026-05-10
+    //   2nd due: 2025-05-10 + 730 = 2027-05-10  ← next due after 1 submission
     const result = checkStemI983Reporting(
       STUDENT,
       ctx({ stemI983Submissions: ['2026-05-01'] }),
       '2026-06-01',
     );
     expect(result.status).toBe('pass');
-    // Next due: May 1 2026 + 365 = May 1 2027 (approximately)
-    expect(result.outputs['nextDueDate']).toBe('2027-05-01');
+    expect(result.outputs['nextDueDate']).toBe('2027-05-10');
   });
 
   it('returns violation when second report is overdue', () => {
@@ -90,11 +92,13 @@ describe('checkStemI983Reporting', () => {
     expect((result.outputs['daysOverdue'] as number)).toBeGreaterThan(0);
   });
 
-  it('returns pass when STEM-OPT period has expired', () => {
-    // After STEM-OPT ends, no further reporting is required
+  it('returns pass when both evaluations are on record and STEM-OPT has expired', () => {
+    // Student completed both the 12-month and final 24-month evaluations.
+    // Next would-be due date = stemStart + 3*365 = ~2028-05-10, which is well after
+    // STEM expiry (2027-05-09) → no more reporting required.
     const result = checkStemI983Reporting(
       STUDENT,
-      ctx({ stemI983Submissions: ['2026-05-10'] }),
+      ctx({ stemI983Submissions: ['2026-05-10', '2027-04-30'] }),
       '2027-05-15', // after STEM end date 2027-05-09
     );
     expect(result.status).toBe('pass');
