@@ -536,3 +536,70 @@ export async function getStudentAudit(
   if (!res.ok) throw new Error(res.statusText);
   return res.json();
 }
+
+// --- Regulation-change watcher ---
+
+export interface WatcherCheckLog {
+  id: string;
+  startedAt: string;
+  finishedAt: string | null;
+  sourcesChecked: number;
+  changesFound: number;
+  ticketsCreated: number;
+  error: string | null;
+}
+
+export type ReviewStatus =
+  | 'pending'
+  | 'reviewed-no-change'
+  | 'reviewed-rule-updated'
+  | 'reviewed-false-positive';
+
+export interface ReviewTicket {
+  id: string;
+  sourceId: string;
+  sourceUrl: string;
+  diffSummary: string;
+  affectedRuleIds: string[];
+  createdAt: string;
+  status: ReviewStatus;
+  reviewedAt: string | null;
+  reviewerNote: string | null;
+}
+
+export async function getWatcherLog(): Promise<WatcherCheckLog[]> {
+  const res = await fetch(`${BASE}/admin/watcher/log`);
+  if (!res.ok) throw new Error(res.statusText);
+  return res.json();
+}
+
+export async function triggerWatcherRun(): Promise<{ ok: boolean; message: string }> {
+  const res = await fetch(`${BASE}/admin/watcher/run`, { method: 'POST' });
+  if (!res.ok) throw new Error(res.statusText);
+  return res.json();
+}
+
+export async function getReviewQueue(status?: ReviewStatus): Promise<ReviewTicket[]> {
+  const url = status
+    ? `${BASE}/admin/review-queue?status=${encodeURIComponent(status)}`
+    : `${BASE}/admin/review-queue`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(res.statusText);
+  return res.json();
+}
+
+export async function resolveReviewTicket(
+  id: string,
+  status: Exclude<ReviewStatus, 'pending'>,
+  reviewerNote: string,
+): Promise<void> {
+  const res = await fetch(`${BASE}/admin/review-queue/${encodeURIComponent(id)}/resolve`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status, reviewerNote }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: res.statusText }));
+    throw new Error((err as { error?: string }).error ?? res.statusText);
+  }
+}

@@ -158,5 +158,46 @@ export function initDb(): void {
       student_id  TEXT NOT NULL REFERENCES students(id),
       submitted_at TEXT NOT NULL          -- ISO 8601 date
     );
+
+    -- ── Regulation-change watcher ────────────────────────────────────────────
+    -- One row per scheduled or manual check run.
+    -- Append-only: proves the watcher is actually executing periodically.
+    CREATE TABLE IF NOT EXISTS watcher_check_log (
+      id              TEXT PRIMARY KEY,   -- UUID
+      started_at      TEXT NOT NULL,      -- ISO 8601
+      finished_at     TEXT,               -- NULL while in-progress
+      sources_checked INTEGER NOT NULL DEFAULT 0,
+      changes_found   INTEGER NOT NULL DEFAULT 0,
+      tickets_created INTEGER NOT NULL DEFAULT 0,
+      error           TEXT                -- populated if the run threw
+    );
+
+    -- One row per (source, check-run). Content hash enables real diff detection.
+    -- "changed" is 0 on bootstrap (no previous snapshot to compare) or when hash matches.
+    CREATE TABLE IF NOT EXISTS source_snapshots (
+      id              TEXT PRIMARY KEY,
+      check_run_id    TEXT NOT NULL REFERENCES watcher_check_log(id),
+      source_id       TEXT NOT NULL,      -- matches an entry in sources.ts
+      url             TEXT NOT NULL,
+      content_hash    TEXT NOT NULL,      -- SHA-256 of stripped visible text
+      content_excerpt TEXT NOT NULL,      -- first 4 KB of stripped text
+      checked_at      TEXT NOT NULL,
+      changed         INTEGER NOT NULL DEFAULT 0   -- 1 = hash differs from previous snapshot
+    );
+
+    -- Human-reviewable queue. Created only when a change is detected.
+    -- The watcher NEVER modifies this table after creation — only humans do.
+    CREATE TABLE IF NOT EXISTS rule_review_queue (
+      id                TEXT PRIMARY KEY,
+      source_id         TEXT NOT NULL,
+      source_url        TEXT NOT NULL,
+      diff_summary      TEXT NOT NULL,    -- Claude-generated plain-language summary
+      affected_rule_ids TEXT NOT NULL,    -- JSON array of ComplianceRule IDs
+      created_at        TEXT NOT NULL,
+      status            TEXT NOT NULL DEFAULT 'pending',
+        -- 'pending' | 'reviewed-no-change' | 'reviewed-rule-updated' | 'reviewed-false-positive'
+      reviewed_at       TEXT,
+      reviewer_note     TEXT              -- required when status = 'reviewed-rule-updated'
+    );
   `);
 }

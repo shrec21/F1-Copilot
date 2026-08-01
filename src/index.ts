@@ -4,6 +4,7 @@ import cors from '@fastify/cors';
 import { initDb } from './data/schema';
 import { registerRoutes } from './api/routes';
 import { startOutboxDispatcher } from './data/outbox-dispatcher';
+import { startWatcher } from './watcher/scheduler';
 
 const fastify = Fastify({ logger: false });
 fastify.register(cors, {
@@ -20,6 +21,7 @@ const start = async () => {
     initDb();
     registerRoutes(fastify);
     startOutboxDispatcher();
+    startWatcher();
     await fastify.listen({ port: 3000, host: '0.0.0.0' });
     console.log('Server running on port 3000');
   } catch (err) {

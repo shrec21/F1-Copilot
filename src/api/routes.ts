@@ -36,6 +36,13 @@ import { generateDsoEmail } from '../mcp/dso-email';
 import { TOPIC_TO_FILENAME } from '../rules/topics';
 import { fetchImmigrationNews } from '../news/fetcher';
 import type { Role } from '../engine/types';
+import {
+  getCheckLogs,
+  getAllReviewTickets,
+  resolveReviewTicket,
+} from '../watcher/queries';
+import { runCheckCycle } from '../watcher/checker';
+import type { ReviewStatus } from '../watcher/queries';
 
 interface FullStatus {
   unemployment: ReturnType<typeof computeUnemploymentDays> | null;
@@ -553,4 +560,72 @@ export function registerRoutes(fastify: FastifyInstance): void {
 
     return reply.send({ student, ruleResults: results });
   });
+
+  // ── Regulation-watcher admin endpoints ─────────────────────────────────────
+
+  // GET /admin/watcher/log — check run history (proves scheduler is running)
+  fastify.get('/admin/watcher/log', async (_request, reply) => {
+    const logs = getCheckLogs(50);
+    return reply.send(logs);
+  });
+
+  // POST /admin/watcher/run — manually trigger one check cycle (for demo)
+  fastify.post('/admin/watcher/run', async (_request, reply) => {
+    // Fire and forget — check can take 10–30 s (5 external fetches + Claude call).
+    // The frontend polls /admin/watcher/log to see when the run completes.
+    void runCheckCycle().catch((err: unknown) => {
+      console.error('[watcher] manual run error:', err);
+    });
+    return reply.status(202).send({ ok: true, message: 'Watcher check started' });
+  });
+
+  // GET /admin/review-queue — list all tickets, optionally filtered by status
+  fastify.get('/admin/review-queue', async (request, reply) => {
+    const { status } = request.query as { status?: string };
+    const validStatuses: ReviewStatus[] = [
+      'pending', 'reviewed-no-change', 'reviewed-rule-updated', 'reviewed-false-positive',
+    ];
+    const statusFilter = validStatuses.includes(status as ReviewStatus)
+      ? (status as ReviewStatus)
+      : undefined;
+    const tickets = getAllReviewTickets(statusFilter);
+    return reply.send(tickets);
+  });
+
+  // POST /admin/review-queue/:id/resolve — human marks a ticket reviewed
+  fastify.post<{ Params: { id: string } }>(
+    '/admin/review-queue/:id/resolve',
+    async (request, reply) => {
+      const { id } = request.params;
+      const body = request.body as { status?: unknown; reviewerNote?: unknown };
+
+      const validResolutions: ReviewStatus[] = [
+        'reviewed-no-change', 'reviewed-rule-updated', 'reviewed-false-positive',
+      ];
+      if (!validResolutions.includes(body.status as ReviewStatus)) {
+        return reply.status(400).send({
+          error: `status must be one of: ${validResolutions.join(', ')}`,
+        });
+      }
+
+      if (typeof body.reviewerNote !== 'string' || body.reviewerNote.trim() === '') {
+        return reply.status(400).send({ error: 'reviewerNote is required and must be non-empty' });
+      }
+
+      const updated = resolveReviewTicket(
+        id,
+        body.status as Exclude<ReviewStatus, 'pending'>,
+        body.reviewerNote.trim(),
+        new Date().toISOString(),
+      );
+
+      if (!updated) {
+        return reply.status(404).send({
+          error: `Ticket ${id} not found or already resolved`,
+        });
+      }
+
+      return reply.send({ ok: true });
+    },
+  );
 }
