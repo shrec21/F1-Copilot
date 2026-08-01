@@ -70,7 +70,7 @@ export const SOURCES: WatcherSource[] = [
   },
   {
     id: 'sevp-i983',
-    url: 'https://studyinthestates.dhs.gov/sevis-help-hub/student-records/fm-student-employment/i-983-training-plan-for-stem-opt-students',
+    url: 'https://studyinthestates.dhs.gov/stem-opt-hub/for-students/students-and-the-form-i-983',
     description: 'SEVP guidance on the I-983 Training Plan. Covers the 12-month '
       + 'self-evaluation reporting cycle required for STEM OPT students.',
     affectedRuleIds: [
