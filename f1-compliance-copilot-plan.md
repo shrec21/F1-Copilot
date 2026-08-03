@@ -127,15 +127,23 @@ back correct day counts and flags, verified against hand-calculated expected val
       (see https://github.com/modelcontextprotocol/typescript-sdk for server examples) exposing:
   - `lookup_rule(topic)` — reads from the YAML rules corpus, returns rule text + citation
   - `get_compliance_status(userId)` — calls into Phase 2 API, returns computed status
+  - `fetch_immigration_news()` — fetches recent USCIS/DHS/SEVP announcements via a web
+    search MCP (Brave Search or Perplexity); **used only for the news panel, never for
+    compliance answers**
 - [ ] Claude API integration: takes a plain-English question, calls `lookup_rule` +
       `get_compliance_status` as needed, composes an answer that must include citations
       and the standard disclaimer
 - [ ] System prompt constraint: the agent must refuse to answer novel legal questions
       outside the rules corpus and instead say "this isn't covered by what I can verify —
       talk to your DSO." No improvising rule interpretations.
+- [ ] System prompt constraint: `fetch_immigration_news` results must **never** be used
+      when answering compliance questions — they are informational only and must be
+      displayed in a separate UI panel with a clear "unverified — check official sources
+      before acting" label.
 
 **Exit criteria:** you can ask "can I work a second part-time job on top of my CPT role?"
-and get an answer citing the specific rule and your specific tracked data.
+and get an answer citing the specific rule and your specific tracked data. The news panel
+shows recent USCIS/DHS announcements independently.
 
 ---
 
@@ -144,6 +152,10 @@ and get an answer citing the specific rule and your specific tracked data.
 - [ ] React + Vite + Tailwind
 - [ ] Views: timeline of employment/authorization periods, a "days remaining" gauge for
       OPT unemployment clock, a form to log new periods, a chat box wired to the agent
+- [ ] Live news panel: a separate read-only section that displays recent USCIS/DHS/SEVP
+      announcements fetched via `fetch_immigration_news`. Must be visually distinct from
+      the compliance dashboard — different background, a persistent "Informational only —
+      not verified compliance guidance" label, and no connection to the engine output.
 - [ ] Disclaimer banner, persistent, not dismissible-forever. Banner text is sourced from
       the `disclaimer` field of the loaded `RuleFile` objects (not hardcoded in the UI),
       so updating disclaimer language only requires editing the YAML files.
