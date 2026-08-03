@@ -127,7 +127,9 @@ describe('checkCptEligibilityImpact', () => {
       },
     ];
     const result = checkCptEligibilityImpact(roles, CAP, RULE_ID, DISCLAIMER);
-    expect(result.totalFullTimeMonths).toBe(11);
+    // 2023-01-01 to 2023-11-30 = 334 days → 11.1 months
+    expect(result.totalFullTimeDays).toBe(334);
+    expect(result.totalFullTimeMonths).toBe(11.1);
     expect(result.optEligibilityAtRisk).toBe(false);
   });
 
@@ -143,7 +145,9 @@ describe('checkCptEligibilityImpact', () => {
       },
     ];
     const result = checkCptEligibilityImpact(roles, CAP, RULE_ID, DISCLAIMER);
-    expect(result.totalFullTimeMonths).toBe(12);
+    // 2023-01-01 to 2023-12-31 = 365 days → 12.2 months; 365 >= 360 → at risk
+    expect(result.totalFullTimeDays).toBe(365);
+    expect(result.totalFullTimeMonths).toBe(12.2);
     expect(result.optEligibilityAtRisk).toBe(true);
   });
 
@@ -159,11 +163,12 @@ describe('checkCptEligibilityImpact', () => {
       },
     ];
     const result = checkCptEligibilityImpact(roles, CAP, RULE_ID, DISCLAIMER);
+    expect(result.totalFullTimeDays).toBe(0);
     expect(result.totalFullTimeMonths).toBe(0);
     expect(result.optEligibilityAtRisk).toBe(false);
   });
 
-  it('overlapping full-time CPT roles count the union of months, not the sum', () => {
+  it('overlapping full-time CPT roles count the union of days, not the sum', () => {
     const roles = [
       {
         id: 'r1',
@@ -183,6 +188,8 @@ describe('checkCptEligibilityImpact', () => {
       },
     ];
     const result = checkCptEligibilityImpact(roles, CAP, RULE_ID, DISCLAIMER);
+    // Union of 2023-01-01→2023-06-30: 31+28+31+30+31+30 = 181 days → 6.0 months
+    expect(result.totalFullTimeDays).toBe(181);
     expect(result.totalFullTimeMonths).toBe(6);
     expect(result.optEligibilityAtRisk).toBe(false);
   });

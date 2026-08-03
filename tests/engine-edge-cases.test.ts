@@ -197,8 +197,8 @@ describe('CPT full-time month counting', () => {
   const CPT_RULE_ID = 'cpt-opt-eligibility-impact';
   const CPT_CAP = 12;
 
-  it('full-time CPT Jan 15 – Apr 15 (2024) touches 4 months, cap 12 → not at risk', () => {
-    // Months: Jan, Feb, Mar, Apr = 4
+  it('full-time CPT Jan 15 – Apr 15 (2024): 92 actual days → 3.1 months, cap 12 → not at risk', () => {
+    // 2024 is a leap year: Jan(17)+Feb(29)+Mar(31)+Apr(15) = 92 days → 3.1 months
     const roles = [
       {
         id: 'r1',
@@ -210,12 +210,13 @@ describe('CPT full-time month counting', () => {
       },
     ];
     const result = checkCptEligibilityImpact(roles, CPT_CAP, CPT_RULE_ID, DISCLAIMER);
-    expect(result.totalFullTimeMonths).toBe(4);
+    expect(result.totalFullTimeDays).toBe(92);
+    expect(result.totalFullTimeMonths).toBe(3.1);
     expect(result.optEligibilityAtRisk).toBe(false);
   });
 
   // ─── 11. CPT part-time excluded from full-time count ──────────────────────
-  it('full-time CPT Jan–Nov 2024 (11 months) + part-time CPT Dec 2024 → totalFullTimeMonths = 11, not at risk', () => {
+  it('full-time CPT Jan–Nov 2024 (335 days) + part-time CPT Dec 2024 → 11.2 months, not at risk', () => {
     const roles = [
       {
         id: 'r1',
@@ -235,7 +236,9 @@ describe('CPT full-time month counting', () => {
       },
     ];
     const result = checkCptEligibilityImpact(roles, CPT_CAP, CPT_RULE_ID, DISCLAIMER);
-    expect(result.totalFullTimeMonths).toBe(11);
+    // 2024 leap year: Jan(31)+Feb(29)+Mar(31)+Apr(30)+May(31)+Jun(30)+Jul(31)+Aug(31)+Sep(30)+Oct(31)+Nov(30) = 335 days → 11.2 months
+    expect(result.totalFullTimeDays).toBe(335);
+    expect(result.totalFullTimeMonths).toBe(11.2);
     expect(result.optEligibilityAtRisk).toBe(false);
   });
 });
