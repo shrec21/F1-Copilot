@@ -7,3 +7,10 @@ tests/*.js
 .env
 .env.*
 !.env.example
+
+# Local database (runtime artifact — not version controlled)
+data.db
+
+# Claude Code internal tooling
+.claude/
+.agents/
