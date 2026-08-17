@@ -1,3 +1,5 @@
+import { performance } from 'perf_hooks';
+import { randomUUID } from 'crypto';
 import type { FastifyInstance } from 'fastify';
 import { loadRuleFile } from '../rules/loader';
 import { computeUnemploymentDays } from '../engine/unemployment-clock';
@@ -29,6 +31,9 @@ import {
   getStudentById,
   getRuleContextForStudent,
   getAuditTrailForStudent,
+  insertMetric,
+  getMetricValues,
+  getOutboxLagValues,
 } from '../data/queries';
 import { evaluateAllRules } from '@f1/rule-engine';
 import { askAgent } from '../mcp/agent';
@@ -43,6 +48,29 @@ import {
 } from '../watcher/queries';
 import { runCheckCycle } from '../watcher/checker';
 import type { ReviewStatus } from '../watcher/queries';
+
+// ── Observability helpers ─────────────────────────────────────────────────────
+
+/** Returns the value at the p-th percentile of a pre-sorted array, or null if empty. */
+function percentile(sortedAsc: number[], p: number): number | null {
+  if (sortedAsc.length === 0) return null;
+  const idx = Math.min(
+    Math.floor((p / 100) * sortedAsc.length),
+    sortedAsc.length - 1,
+  );
+  return Math.round(sortedAsc[idx] * 10) / 10;
+}
+
+/** Fire-and-forget metric write — never throws. */
+function recordMetric(name: string, valueMs: number, tags: Record<string, unknown> = {}): void {
+  try {
+    insertMetric({ id: randomUUID(), name, valueMs, tags, recordedAt: new Date().toISOString() });
+  } catch {
+    // Metrics are best-effort; never break the main request path
+  }
+}
+
+// ── Status helpers ────────────────────────────────────────────────────────────
 
 interface FullStatus {
   unemployment: ReturnType<typeof computeUnemploymentDays> | null;
@@ -365,11 +393,13 @@ export function registerRoutes(fastify: FastifyInstance): void {
       return reply.status(400).send({ error: `emailType must be one of: ${validTypes.join(', ')}` });
     }
 
+    const t0 = performance.now();
     const email = await generateDsoEmail(
       body.emailType as 'cpt-request' | 'opt-question' | 'stem-extension' | 'general-inquiry',
       profile,
       typeof body.additionalContext === 'string' ? body.additionalContext : undefined,
     );
+    recordMetric('dso_email', performance.now() - t0, { emailType: body.emailType });
     return reply.send({ email });
   });
 
@@ -498,7 +528,9 @@ export function registerRoutes(fastify: FastifyInstance): void {
     if (!question || typeof question !== 'string') {
       return reply.status(400).send({ error: 'question is required' });
     }
+    const t0 = performance.now();
     const answer = await askAgent(question);
+    recordMetric('ask_agent', performance.now() - t0);
     return reply.send({ answer });
   });
 
@@ -517,7 +549,9 @@ export function registerRoutes(fastify: FastifyInstance): void {
 
     const cohort = students.map(student => {
       const context = getRuleContextForStudent(student.id);
+      const t0 = performance.now();
       const results = evaluateAllRules(student, context, todayIso);
+      recordMetric('rule_eval', performance.now() - t0, { studentId: student.id });
       const activeFlags = results.filter(r => r.status === 'violation' || r.status === 'warning');
 
       return {
@@ -590,6 +624,58 @@ export function registerRoutes(fastify: FastifyInstance): void {
       : undefined;
     const tickets = getAllReviewTickets(statusFilter);
     return reply.send(tickets);
+  });
+
+  // GET /admin/metrics — latency stats for rule eval, Claude API calls, outbox, and watcher
+  fastify.get('/admin/metrics', async (_request, reply) => {
+    const ruleEvalValues  = getMetricValues('rule_eval');
+    const askAgentValues  = getMetricValues('ask_agent');
+    const dsoEmailValues  = getMetricValues('dso_email');
+    const { pendingCount, lagValues } = getOutboxLagValues();
+
+    // Watcher run durations from existing check log
+    const watcherLogs = getCheckLogs(200);
+    const completedRuns = watcherLogs.filter(l => l.finishedAt !== null);
+    const watcherDurations = completedRuns
+      .map(l => new Date(l.finishedAt!).getTime() - new Date(l.startedAt).getTime())
+      .sort((a, b) => a - b);
+    const errorCount = watcherLogs.filter(l => l.error !== null).length;
+
+    const avgMs = (arr: number[]): number | null =>
+      arr.length === 0 ? null : Math.round(arr.reduce((s, v) => s + v, 0) / arr.length * 10) / 10;
+
+    return reply.send({
+      ruleEval: {
+        p50Ms: percentile(ruleEvalValues, 50),
+        p95Ms: percentile(ruleEvalValues, 95),
+        count: ruleEvalValues.length,
+      },
+      askAgent: {
+        p50Ms: percentile(askAgentValues, 50),
+        p95Ms: percentile(askAgentValues, 95),
+        count: askAgentValues.length,
+      },
+      dsoEmail: {
+        p50Ms: percentile(dsoEmailValues, 50),
+        p95Ms: percentile(dsoEmailValues, 95),
+        count: dsoEmailValues.length,
+      },
+      outbox: {
+        pendingCount,
+        avgLagMs: avgMs(lagValues),
+        p95LagMs: percentile(lagValues, 95),
+        dispatchedCount: lagValues.length,
+      },
+      watcher: {
+        totalRuns: watcherLogs.length,
+        avgDurationMs: avgMs(watcherDurations),
+        p95DurationMs: percentile(watcherDurations, 95),
+        errorRate: watcherLogs.length > 0
+          ? Math.round((errorCount / watcherLogs.length) * 1000) / 1000
+          : 0,
+        lastRunAt: watcherLogs[0]?.startedAt ?? null,
+      },
+    });
   });
 
   // POST /admin/review-queue/:id/resolve — human marks a ticket reviewed

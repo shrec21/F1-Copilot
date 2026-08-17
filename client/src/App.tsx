@@ -18,8 +18,9 @@ import { FilingCalculator } from './components/FilingCalculator';
 import { RiskModel } from './components/RiskModel';
 import { CohortTab } from './components/CohortTab';
 import { RegulationWatcherTab } from './components/RegulationWatcherTab';
+import { ObservabilityTab } from './components/ObservabilityTab';
 
-type Tab = 'dashboard' | 'profile' | 'employment' | 'chat' | 'rules' | 'news' | 'simulator' | 'dso-email' | 'timeline' | 'action-plan' | 'documents' | 'scenarios' | 'filing' | 'risk' | 'cohort' | 'regulation';
+type Tab = 'dashboard' | 'profile' | 'employment' | 'chat' | 'rules' | 'news' | 'simulator' | 'dso-email' | 'timeline' | 'action-plan' | 'documents' | 'scenarios' | 'filing' | 'risk' | 'cohort' | 'regulation' | 'observability';
 
 const TABS: { id: Tab; label: string }[] = [
   { id: 'dashboard', label: 'Dashboard' },
@@ -35,6 +36,7 @@ const TABS: { id: Tab; label: string }[] = [
   { id: 'timeline', label: 'Timeline' },
   { id: 'cohort', label: 'Cohort' },
   { id: 'regulation', label: 'Reg Watcher' },
+  { id: 'observability', label: 'Observability' },
   { id: 'chat', label: 'Chat' },
   { id: 'rules', label: 'Rules' },
   { id: 'news', label: 'News' },
@@ -98,6 +100,7 @@ function App() {
         {activeTab === 'timeline' && <TimelineTab />}
         {activeTab === 'cohort' && <CohortTab />}
         {activeTab === 'regulation' && <RegulationWatcherTab />}
+        {activeTab === 'observability' && <ObservabilityTab />}
         {activeTab === 'chat' && <ChatBox />}
         {activeTab === 'rules' && <RulesTab />}
         {activeTab === 'news' && <NewsPanel />}

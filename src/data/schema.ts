@@ -199,5 +199,17 @@ export function initDb(): void {
       reviewed_at       TEXT,
       reviewer_note     TEXT              -- required when status = 'reviewed-rule-updated'
     );
+
+    -- ── Observability metrics ─────────────────────────────────────────────────
+    -- Append-only timing samples. One row per instrumented call.
+    -- name: 'rule_eval' | 'ask_agent' | 'dso_email'
+    CREATE TABLE IF NOT EXISTS metrics (
+      id          TEXT PRIMARY KEY,
+      name        TEXT NOT NULL,
+      value_ms    REAL NOT NULL,
+      tags        TEXT NOT NULL DEFAULT '{}',   -- JSON metadata
+      recorded_at TEXT NOT NULL
+    );
+    CREATE INDEX IF NOT EXISTS idx_metrics_name ON metrics(name, recorded_at DESC);
   `);
 }

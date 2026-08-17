@@ -429,6 +429,48 @@ export function getAuditTrailForStudent(studentId: string): Array<{
   }>;
 }
 
+// ── Observability metrics ──────────────────────────────────────────────────────
+
+export function insertMetric(m: {
+  id: string;
+  name: string;
+  valueMs: number;
+  tags: Record<string, unknown>;
+  recordedAt: string;
+}): void {
+  db.prepare(`
+    INSERT INTO metrics (id, name, value_ms, tags, recorded_at)
+    VALUES (?, ?, ?, ?, ?)
+  `).run(m.id, m.name, m.valueMs, JSON.stringify(m.tags), m.recordedAt);
+}
+
+/** Returns value_ms samples sorted ASC — caller computes percentiles. */
+export function getMetricValues(name: string, limit = 500): number[] {
+  const rows = db.prepare(
+    'SELECT value_ms FROM metrics WHERE name = ? ORDER BY value_ms ASC LIMIT ?',
+  ).all(name, limit) as Array<{ value_ms: number }>;
+  return rows.map(r => r.value_ms);
+}
+
+/** Outbox lag: ms between created_at and dispatched_at for dispatched events. */
+export function getOutboxLagValues(): { pendingCount: number; lagValues: number[] } {
+  const { cnt } = db.prepare(
+    'SELECT COUNT(*) AS cnt FROM outbox_events WHERE dispatched = 0',
+  ).get() as { cnt: number };
+
+  const rows = db.prepare(`
+    SELECT CAST(
+      (julianday(dispatched_at) - julianday(created_at)) * 86400000 AS REAL
+    ) AS lag_ms
+    FROM outbox_events
+    WHERE dispatched = 1 AND dispatched_at IS NOT NULL
+    ORDER BY lag_ms ASC
+    LIMIT 500
+  `).all() as Array<{ lag_ms: number }>;
+
+  return { pendingCount: cnt, lagValues: rows.map(r => r.lag_ms) };
+}
+
 export function getOptWindow(): DateRange | null {
   const row = db.prepare(`
     SELECT start_date, end_date FROM authorizations

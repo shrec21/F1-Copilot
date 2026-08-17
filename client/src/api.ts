@@ -603,3 +603,36 @@ export async function resolveReviewTicket(
     throw new Error((err as { error?: string }).error ?? res.statusText);
   }
 }
+
+// --- Observability metrics ---
+
+export interface LatencyStat {
+  p50Ms: number | null;
+  p95Ms: number | null;
+  count: number;
+}
+
+export interface MetricsResponse {
+  ruleEval: LatencyStat;
+  askAgent: LatencyStat;
+  dsoEmail: LatencyStat;
+  outbox: {
+    pendingCount: number;
+    avgLagMs: number | null;
+    p95LagMs: number | null;
+    dispatchedCount: number;
+  };
+  watcher: {
+    totalRuns: number;
+    avgDurationMs: number | null;
+    p95DurationMs: number | null;
+    errorRate: number;
+    lastRunAt: string | null;
+  };
+}
+
+export async function getMetrics(): Promise<MetricsResponse> {
+  const res = await fetch(`${BASE}/admin/metrics`);
+  if (!res.ok) throw new Error(res.statusText);
+  return res.json();
+}
