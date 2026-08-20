@@ -1,0 +1,2703 @@
+{
+  "version": 1,
+  "updatedAt": "2026-08-20T19:20:21.414Z",
+  "components": {
+    "dependency:@tailwindcss/vite": {
+      "id": "dependency:@tailwindcss/vite",
+      "kind": "dependency",
+      "name": "@tailwindcss/vite",
+      "sourceFile": "client/package.json",
+      "detail": "^4.3.3",
+      "lastChanged": "2026-08-17T17:38:22.438Z"
+    },
+    "dependency:@types/node": {
+      "id": "dependency:@types/node",
+      "kind": "dependency",
+      "name": "@types/node",
+      "sourceFile": "package.json",
+      "detail": "^22.20.1",
+      "lastChanged": "2026-08-20T19:20:21.410Z"
+    },
+    "dependency:@types/react": {
+      "id": "dependency:@types/react",
+      "kind": "dependency",
+      "name": "@types/react",
+      "sourceFile": "client/package.json",
+      "detail": "^19.2.17",
+      "lastChanged": "2026-08-17T17:38:22.438Z"
+    },
+    "dependency:@types/react-dom": {
+      "id": "dependency:@types/react-dom",
+      "kind": "dependency",
+      "name": "@types/react-dom",
+      "sourceFile": "client/package.json",
+      "detail": "^19.2.3",
+      "lastChanged": "2026-08-17T17:38:22.438Z"
+    },
+    "dependency:@vitejs/plugin-react": {
+      "id": "dependency:@vitejs/plugin-react",
+      "kind": "dependency",
+      "name": "@vitejs/plugin-react",
+      "sourceFile": "client/package.json",
+      "detail": "^6.0.3",
+      "lastChanged": "2026-08-17T17:38:22.438Z"
+    },
+    "dependency:oxlint": {
+      "id": "dependency:oxlint",
+      "kind": "dependency",
+      "name": "oxlint",
+      "sourceFile": "client/package.json",
+      "detail": "^1.71.0",
+      "lastChanged": "2026-08-17T17:38:22.438Z"
+    },
+    "dependency:react": {
+      "id": "dependency:react",
+      "kind": "dependency",
+      "name": "react",
+      "sourceFile": "client/package.json",
+      "detail": "^19.2.7",
+      "lastChanged": "2026-08-17T17:38:22.438Z"
+    },
+    "dependency:react-dom": {
+      "id": "dependency:react-dom",
+      "kind": "dependency",
+      "name": "react-dom",
+      "sourceFile": "client/package.json",
+      "detail": "^19.2.7",
+      "lastChanged": "2026-08-17T17:38:22.438Z"
+    },
+    "dependency:tailwindcss": {
+      "id": "dependency:tailwindcss",
+      "kind": "dependency",
+      "name": "tailwindcss",
+      "sourceFile": "client/package.json",
+      "detail": "^4.3.3",
+      "lastChanged": "2026-08-17T17:38:22.438Z"
+    },
+    "dependency:typescript": {
+      "id": "dependency:typescript",
+      "kind": "dependency",
+      "name": "typescript",
+      "sourceFile": "package.json",
+      "detail": "^7.0.2",
+      "lastChanged": "2026-08-20T19:20:21.410Z"
+    },
+    "dependency:vite": {
+      "id": "dependency:vite",
+      "kind": "dependency",
+      "name": "vite",
+      "sourceFile": "client/package.json",
+      "detail": "^8.1.1",
+      "lastChanged": "2026-08-17T17:38:22.438Z"
+    },
+    "dependency:@anthropic-ai/sdk": {
+      "id": "dependency:@anthropic-ai/sdk",
+      "kind": "dependency",
+      "name": "@anthropic-ai/sdk",
+      "sourceFile": "package.json",
+      "detail": "^0.115.0",
+      "lastChanged": "2026-08-17T17:38:22.439Z"
+    },
+    "dependency:@fastify/cors": {
+      "id": "dependency:@fastify/cors",
+      "kind": "dependency",
+      "name": "@fastify/cors",
+      "sourceFile": "package.json",
+      "detail": "^11.3.0",
+      "lastChanged": "2026-08-17T17:38:22.439Z"
+    },
+    "dependency:@modelcontextprotocol/sdk": {
+      "id": "dependency:@modelcontextprotocol/sdk",
+      "kind": "dependency",
+      "name": "@modelcontextprotocol/sdk",
+      "sourceFile": "package.json",
+      "detail": "^1.30.0",
+      "lastChanged": "2026-08-17T17:38:22.439Z"
+    },
+    "dependency:@types/better-sqlite3": {
+      "id": "dependency:@types/better-sqlite3",
+      "kind": "dependency",
+      "name": "@types/better-sqlite3",
+      "sourceFile": "package.json",
+      "detail": "^7.6.13",
+      "lastChanged": "2026-08-17T17:38:22.439Z"
+    },
+    "dependency:better-sqlite3": {
+      "id": "dependency:better-sqlite3",
+      "kind": "dependency",
+      "name": "better-sqlite3",
+      "sourceFile": "package.json",
+      "detail": "^13.0.1",
+      "lastChanged": "2026-08-17T17:38:22.439Z"
+    },
+    "dependency:dotenv": {
+      "id": "dependency:dotenv",
+      "kind": "dependency",
+      "name": "dotenv",
+      "sourceFile": "package.json",
+      "detail": "^17.4.2",
+      "lastChanged": "2026-08-17T17:38:22.439Z"
+    },
+    "dependency:fastify": {
+      "id": "dependency:fastify",
+      "kind": "dependency",
+      "name": "fastify",
+      "sourceFile": "package.json",
+      "detail": "^5.10.0",
+      "lastChanged": "2026-08-17T17:38:22.439Z"
+    },
+    "dependency:tsx": {
+      "id": "dependency:tsx",
+      "kind": "dependency",
+      "name": "tsx",
+      "sourceFile": "package.json",
+      "detail": "^4.23.1",
+      "lastChanged": "2026-08-17T17:38:22.439Z"
+    },
+    "dependency:vitest": {
+      "id": "dependency:vitest",
+      "kind": "dependency",
+      "name": "vitest",
+      "sourceFile": "package.json",
+      "detail": "^4.1.10",
+      "lastChanged": "2026-08-17T17:38:22.439Z"
+    },
+    "dependency:yaml": {
+      "id": "dependency:yaml",
+      "kind": "dependency",
+      "name": "yaml",
+      "sourceFile": "package.json",
+      "detail": "^2.9.0",
+      "lastChanged": "2026-08-17T17:38:22.439Z"
+    },
+    "endpoint:POST /profile": {
+      "id": "endpoint:POST /profile",
+      "kind": "endpoint",
+      "name": "POST /profile",
+      "sourceFile": "src/api/routes.ts",
+      "lastChanged": "2026-08-17T17:38:22.439Z"
+    },
+    "endpoint:GET /profile": {
+      "id": "endpoint:GET /profile",
+      "kind": "endpoint",
+      "name": "GET /profile",
+      "sourceFile": "src/api/routes.ts",
+      "lastChanged": "2026-08-17T17:38:22.439Z"
+    },
+    "endpoint:POST /employment": {
+      "id": "endpoint:POST /employment",
+      "kind": "endpoint",
+      "name": "POST /employment",
+      "sourceFile": "src/api/routes.ts",
+      "lastChanged": "2026-08-17T17:38:22.439Z"
+    },
+    "endpoint:GET /employment": {
+      "id": "endpoint:GET /employment",
+      "kind": "endpoint",
+      "name": "GET /employment",
+      "sourceFile": "src/api/routes.ts",
+      "lastChanged": "2026-08-17T17:38:22.439Z"
+    },
+    "endpoint:POST /authorization": {
+      "id": "endpoint:POST /authorization",
+      "kind": "endpoint",
+      "name": "POST /authorization",
+      "sourceFile": "src/api/routes.ts",
+      "lastChanged": "2026-08-17T17:38:22.439Z"
+    },
+    "endpoint:GET /status": {
+      "id": "endpoint:GET /status",
+      "kind": "endpoint",
+      "name": "GET /status",
+      "sourceFile": "src/api/routes.ts",
+      "lastChanged": "2026-08-17T17:38:22.439Z"
+    },
+    "endpoint:POST /ask": {
+      "id": "endpoint:POST /ask",
+      "kind": "endpoint",
+      "name": "POST /ask",
+      "sourceFile": "src/api/routes.ts",
+      "lastChanged": "2026-08-17T17:38:22.439Z"
+    },
+    "endpoint:GET /news": {
+      "id": "endpoint:GET /news",
+      "kind": "endpoint",
+      "name": "GET /news",
+      "sourceFile": "src/api/routes.ts",
+      "lastChanged": "2026-08-17T17:38:22.439Z"
+    },
+    "endpoint:GET /alerts": {
+      "id": "endpoint:GET /alerts",
+      "kind": "endpoint",
+      "name": "GET /alerts",
+      "sourceFile": "src/api/routes.ts",
+      "lastChanged": "2026-08-17T17:38:22.441Z"
+    },
+    "endpoint:GET /deadlines": {
+      "id": "endpoint:GET /deadlines",
+      "kind": "endpoint",
+      "name": "GET /deadlines",
+      "sourceFile": "src/api/routes.ts",
+      "lastChanged": "2026-08-17T17:38:22.441Z"
+    },
+    "endpoint:POST /simulate": {
+      "id": "endpoint:POST /simulate",
+      "kind": "endpoint",
+      "name": "POST /simulate",
+      "sourceFile": "src/api/routes.ts",
+      "lastChanged": "2026-08-17T17:38:22.441Z"
+    },
+    "endpoint:POST /dso-email": {
+      "id": "endpoint:POST /dso-email",
+      "kind": "endpoint",
+      "name": "POST /dso-email",
+      "sourceFile": "src/api/routes.ts",
+      "lastChanged": "2026-08-17T17:38:22.441Z"
+    },
+    "endpoint:GET /authorizations": {
+      "id": "endpoint:GET /authorizations",
+      "kind": "endpoint",
+      "name": "GET /authorizations",
+      "sourceFile": "src/api/routes.ts",
+      "lastChanged": "2026-08-17T17:38:22.441Z"
+    },
+    "endpoint:GET /action-plan": {
+      "id": "endpoint:GET /action-plan",
+      "kind": "endpoint",
+      "name": "GET /action-plan",
+      "sourceFile": "src/api/routes.ts",
+      "lastChanged": "2026-08-17T17:38:22.441Z"
+    },
+    "endpoint:GET /documents": {
+      "id": "endpoint:GET /documents",
+      "kind": "endpoint",
+      "name": "GET /documents",
+      "sourceFile": "src/api/routes.ts",
+      "lastChanged": "2026-08-17T17:38:22.441Z"
+    },
+    "endpoint:GET /risk-model": {
+      "id": "endpoint:GET /risk-model",
+      "kind": "endpoint",
+      "name": "GET /risk-model",
+      "sourceFile": "src/api/routes.ts",
+      "lastChanged": "2026-08-17T17:38:22.441Z"
+    },
+    "endpoint:GET /filing-windows": {
+      "id": "endpoint:GET /filing-windows",
+      "kind": "endpoint",
+      "name": "GET /filing-windows",
+      "sourceFile": "src/api/routes.ts",
+      "lastChanged": "2026-08-17T17:38:22.441Z"
+    },
+    "endpoint:GET /scenarios": {
+      "id": "endpoint:GET /scenarios",
+      "kind": "endpoint",
+      "name": "GET /scenarios",
+      "sourceFile": "src/api/routes.ts",
+      "lastChanged": "2026-08-17T17:38:22.441Z"
+    },
+    "endpoint:GET /students": {
+      "id": "endpoint:GET /students",
+      "kind": "endpoint",
+      "name": "GET /students",
+      "sourceFile": "src/api/routes.ts",
+      "lastChanged": "2026-08-17T17:38:22.441Z"
+    },
+    "endpoint:GET /admin/watcher/log": {
+      "id": "endpoint:GET /admin/watcher/log",
+      "kind": "endpoint",
+      "name": "GET /admin/watcher/log",
+      "sourceFile": "src/api/routes.ts",
+      "lastChanged": "2026-08-17T17:38:22.441Z"
+    },
+    "endpoint:POST /admin/watcher/run": {
+      "id": "endpoint:POST /admin/watcher/run",
+      "kind": "endpoint",
+      "name": "POST /admin/watcher/run",
+      "sourceFile": "src/api/routes.ts",
+      "lastChanged": "2026-08-17T17:38:22.441Z"
+    },
+    "endpoint:GET /admin/review-queue": {
+      "id": "endpoint:GET /admin/review-queue",
+      "kind": "endpoint",
+      "name": "GET /admin/review-queue",
+      "sourceFile": "src/api/routes.ts",
+      "lastChanged": "2026-08-17T17:38:22.441Z"
+    },
+    "endpoint:GET /admin/metrics": {
+      "id": "endpoint:GET /admin/metrics",
+      "kind": "endpoint",
+      "name": "GET /admin/metrics",
+      "sourceFile": "src/api/routes.ts",
+      "lastChanged": "2026-08-17T17:38:22.441Z"
+    },
+    "table:user_profile": {
+      "id": "table:user_profile",
+      "kind": "table",
+      "name": "user_profile",
+      "sourceFile": "src/data/schema.ts",
+      "detail": "CREATE TABLE",
+      "lastChanged": "2026-08-20T02:46:26.335Z"
+    },
+    "table:employment_periods": {
+      "id": "table:employment_periods",
+      "kind": "table",
+      "name": "employment_periods",
+      "sourceFile": "src/data/schema.ts",
+      "detail": "CREATE TABLE",
+      "lastChanged": "2026-08-20T02:46:26.335Z"
+    },
+    "table:authorizations": {
+      "id": "table:authorizations",
+      "kind": "table",
+      "name": "authorizations",
+      "sourceFile": "src/data/schema.ts",
+      "detail": "CREATE TABLE",
+      "lastChanged": "2026-08-20T02:46:26.335Z"
+    },
+    "table:action_step_completions": {
+      "id": "table:action_step_completions",
+      "kind": "table",
+      "name": "action_step_completions",
+      "sourceFile": "src/data/schema.ts",
+      "detail": "CREATE TABLE",
+      "lastChanged": "2026-08-20T02:46:26.341Z"
+    },
+    "table:document_statuses": {
+      "id": "table:document_statuses",
+      "kind": "table",
+      "name": "document_statuses",
+      "sourceFile": "src/data/schema.ts",
+      "detail": "CREATE TABLE",
+      "lastChanged": "2026-08-20T02:46:26.341Z"
+    },
+    "table:students": {
+      "id": "table:students",
+      "kind": "table",
+      "name": "students",
+      "sourceFile": "src/data/schema.ts",
+      "detail": "CREATE TABLE",
+      "lastChanged": "2026-08-20T02:46:26.341Z"
+    },
+    "table:student_employment": {
+      "id": "table:student_employment",
+      "kind": "table",
+      "name": "student_employment",
+      "sourceFile": "src/data/schema.ts",
+      "detail": "CREATE TABLE",
+      "lastChanged": "2026-08-20T02:46:26.341Z"
+    },
+    "table:student_authorizations": {
+      "id": "table:student_authorizations",
+      "kind": "table",
+      "name": "student_authorizations",
+      "sourceFile": "src/data/schema.ts",
+      "detail": "CREATE TABLE",
+      "lastChanged": "2026-08-20T02:46:26.341Z"
+    },
+    "table:outbox_events": {
+      "id": "table:outbox_events",
+      "kind": "table",
+      "name": "outbox_events",
+      "sourceFile": "src/data/schema.ts",
+      "detail": "CREATE TABLE",
+      "lastChanged": "2026-08-20T02:46:26.341Z"
+    },
+    "table:compliance_events": {
+      "id": "table:compliance_events",
+      "kind": "table",
+      "name": "compliance_events",
+      "sourceFile": "src/data/schema.ts",
+      "detail": "CREATE TABLE",
+      "lastChanged": "2026-08-20T02:46:26.341Z"
+    },
+    "table:audit_trail": {
+      "id": "table:audit_trail",
+      "kind": "table",
+      "name": "audit_trail",
+      "sourceFile": "src/data/schema.ts",
+      "detail": "CREATE TABLE",
+      "lastChanged": "2026-08-20T02:46:26.341Z"
+    },
+    "table:student_i983_submissions": {
+      "id": "table:student_i983_submissions",
+      "kind": "table",
+      "name": "student_i983_submissions",
+      "sourceFile": "src/data/schema.ts",
+      "detail": "CREATE TABLE",
+      "lastChanged": "2026-08-20T02:46:26.341Z"
+    },
+    "table:watcher_check_log": {
+      "id": "table:watcher_check_log",
+      "kind": "table",
+      "name": "watcher_check_log",
+      "sourceFile": "src/data/schema.ts",
+      "detail": "CREATE TABLE",
+      "lastChanged": "2026-08-20T02:46:26.341Z"
+    },
+    "table:source_snapshots": {
+      "id": "table:source_snapshots",
+      "kind": "table",
+      "name": "source_snapshots",
+      "sourceFile": "src/data/schema.ts",
+      "detail": "CREATE TABLE",
+      "lastChanged": "2026-08-20T02:46:26.341Z"
+    },
+    "table:rule_review_queue": {
+      "id": "table:rule_review_queue",
+      "kind": "table",
+      "name": "rule_review_queue",
+      "sourceFile": "src/data/schema.ts",
+      "detail": "CREATE TABLE",
+      "lastChanged": "2026-08-20T02:46:26.341Z"
+    },
+    "table:metrics": {
+      "id": "table:metrics",
+      "kind": "table",
+      "name": "metrics",
+      "sourceFile": "src/data/schema.ts",
+      "detail": "CREATE TABLE",
+      "lastChanged": "2026-08-20T02:46:26.341Z"
+    }
+  },
+  "relationships": [
+    {
+      "from": "table:audit_trail",
+      "to": "table:compliance_events",
+      "label": "FK",
+      "sourceFile": "src/data/schema.ts"
+    },
+    {
+      "from": "table:source_snapshots",
+      "to": "table:watcher_check_log",
+      "label": "FK",
+      "sourceFile": "src/data/schema.ts"
+    },
+    {
+      "from": "table:student_authorizations",
+      "to": "table:students",
+      "label": "FK",
+      "sourceFile": "src/data/schema.ts"
+    },
+    {
+      "from": "table:student_employment",
+      "to": "table:students",
+      "label": "FK",
+      "sourceFile": "src/data/schema.ts"
+    },
+    {
+      "from": "table:student_i983_submissions",
+      "to": "table:students",
+      "label": "FK",
+      "sourceFile": "src/data/schema.ts"
+    },
+    {
+      "from": "endpoint:POST /profile",
+      "to": "table:user_profile",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /profile",
+      "to": "table:user_profile",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /employment",
+      "to": "table:user_profile",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /employment",
+      "to": "table:user_profile",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /authorization",
+      "to": "table:user_profile",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /status",
+      "to": "table:user_profile",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /ask",
+      "to": "table:user_profile",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /news",
+      "to": "table:user_profile",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /alerts",
+      "to": "table:user_profile",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /deadlines",
+      "to": "table:user_profile",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /simulate",
+      "to": "table:user_profile",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /dso-email",
+      "to": "table:user_profile",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /authorizations",
+      "to": "table:user_profile",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /action-plan",
+      "to": "table:user_profile",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /documents",
+      "to": "table:user_profile",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /risk-model",
+      "to": "table:user_profile",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /filing-windows",
+      "to": "table:user_profile",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /scenarios",
+      "to": "table:user_profile",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /students",
+      "to": "table:user_profile",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/watcher/log",
+      "to": "table:user_profile",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /admin/watcher/run",
+      "to": "table:user_profile",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/review-queue",
+      "to": "table:user_profile",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/metrics",
+      "to": "table:user_profile",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /profile",
+      "to": "table:employment_periods",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /profile",
+      "to": "table:employment_periods",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /employment",
+      "to": "table:employment_periods",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /employment",
+      "to": "table:employment_periods",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /authorization",
+      "to": "table:employment_periods",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /status",
+      "to": "table:employment_periods",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /ask",
+      "to": "table:employment_periods",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /news",
+      "to": "table:employment_periods",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /alerts",
+      "to": "table:employment_periods",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /deadlines",
+      "to": "table:employment_periods",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /simulate",
+      "to": "table:employment_periods",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /dso-email",
+      "to": "table:employment_periods",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /authorizations",
+      "to": "table:employment_periods",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /action-plan",
+      "to": "table:employment_periods",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /documents",
+      "to": "table:employment_periods",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /risk-model",
+      "to": "table:employment_periods",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /filing-windows",
+      "to": "table:employment_periods",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /scenarios",
+      "to": "table:employment_periods",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /students",
+      "to": "table:employment_periods",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/watcher/log",
+      "to": "table:employment_periods",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /admin/watcher/run",
+      "to": "table:employment_periods",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/review-queue",
+      "to": "table:employment_periods",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/metrics",
+      "to": "table:employment_periods",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /profile",
+      "to": "table:authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /profile",
+      "to": "table:authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /employment",
+      "to": "table:authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /employment",
+      "to": "table:authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /authorization",
+      "to": "table:authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /status",
+      "to": "table:authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /ask",
+      "to": "table:authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /news",
+      "to": "table:authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /alerts",
+      "to": "table:authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /deadlines",
+      "to": "table:authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /simulate",
+      "to": "table:authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /dso-email",
+      "to": "table:authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /authorizations",
+      "to": "table:authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /action-plan",
+      "to": "table:authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /documents",
+      "to": "table:authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /risk-model",
+      "to": "table:authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /filing-windows",
+      "to": "table:authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /scenarios",
+      "to": "table:authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /students",
+      "to": "table:authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/watcher/log",
+      "to": "table:authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /admin/watcher/run",
+      "to": "table:authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/review-queue",
+      "to": "table:authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/metrics",
+      "to": "table:authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /profile",
+      "to": "table:action_step_completions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /profile",
+      "to": "table:action_step_completions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /employment",
+      "to": "table:action_step_completions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /employment",
+      "to": "table:action_step_completions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /authorization",
+      "to": "table:action_step_completions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /status",
+      "to": "table:action_step_completions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /ask",
+      "to": "table:action_step_completions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /news",
+      "to": "table:action_step_completions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /alerts",
+      "to": "table:action_step_completions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /deadlines",
+      "to": "table:action_step_completions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /simulate",
+      "to": "table:action_step_completions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /dso-email",
+      "to": "table:action_step_completions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /authorizations",
+      "to": "table:action_step_completions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /action-plan",
+      "to": "table:action_step_completions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /documents",
+      "to": "table:action_step_completions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /risk-model",
+      "to": "table:action_step_completions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /filing-windows",
+      "to": "table:action_step_completions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /scenarios",
+      "to": "table:action_step_completions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /students",
+      "to": "table:action_step_completions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/watcher/log",
+      "to": "table:action_step_completions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /admin/watcher/run",
+      "to": "table:action_step_completions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/review-queue",
+      "to": "table:action_step_completions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/metrics",
+      "to": "table:action_step_completions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /profile",
+      "to": "table:document_statuses",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /profile",
+      "to": "table:document_statuses",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /employment",
+      "to": "table:document_statuses",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /employment",
+      "to": "table:document_statuses",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /authorization",
+      "to": "table:document_statuses",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /status",
+      "to": "table:document_statuses",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /ask",
+      "to": "table:document_statuses",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /news",
+      "to": "table:document_statuses",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /alerts",
+      "to": "table:document_statuses",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /deadlines",
+      "to": "table:document_statuses",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /simulate",
+      "to": "table:document_statuses",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /dso-email",
+      "to": "table:document_statuses",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /authorizations",
+      "to": "table:document_statuses",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /action-plan",
+      "to": "table:document_statuses",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /documents",
+      "to": "table:document_statuses",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /risk-model",
+      "to": "table:document_statuses",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /filing-windows",
+      "to": "table:document_statuses",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /scenarios",
+      "to": "table:document_statuses",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /students",
+      "to": "table:document_statuses",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/watcher/log",
+      "to": "table:document_statuses",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /admin/watcher/run",
+      "to": "table:document_statuses",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/review-queue",
+      "to": "table:document_statuses",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/metrics",
+      "to": "table:document_statuses",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /profile",
+      "to": "table:students",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /profile",
+      "to": "table:students",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /employment",
+      "to": "table:students",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /employment",
+      "to": "table:students",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /authorization",
+      "to": "table:students",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /status",
+      "to": "table:students",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /ask",
+      "to": "table:students",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /news",
+      "to": "table:students",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /alerts",
+      "to": "table:students",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /deadlines",
+      "to": "table:students",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /simulate",
+      "to": "table:students",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /dso-email",
+      "to": "table:students",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /authorizations",
+      "to": "table:students",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /action-plan",
+      "to": "table:students",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /documents",
+      "to": "table:students",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /risk-model",
+      "to": "table:students",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /filing-windows",
+      "to": "table:students",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /scenarios",
+      "to": "table:students",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /students",
+      "to": "table:students",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/watcher/log",
+      "to": "table:students",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /admin/watcher/run",
+      "to": "table:students",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/review-queue",
+      "to": "table:students",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/metrics",
+      "to": "table:students",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /profile",
+      "to": "table:student_employment",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /profile",
+      "to": "table:student_employment",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /employment",
+      "to": "table:student_employment",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /employment",
+      "to": "table:student_employment",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /authorization",
+      "to": "table:student_employment",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /status",
+      "to": "table:student_employment",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /ask",
+      "to": "table:student_employment",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /news",
+      "to": "table:student_employment",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /alerts",
+      "to": "table:student_employment",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /deadlines",
+      "to": "table:student_employment",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /simulate",
+      "to": "table:student_employment",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /dso-email",
+      "to": "table:student_employment",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /authorizations",
+      "to": "table:student_employment",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /action-plan",
+      "to": "table:student_employment",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /documents",
+      "to": "table:student_employment",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /risk-model",
+      "to": "table:student_employment",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /filing-windows",
+      "to": "table:student_employment",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /scenarios",
+      "to": "table:student_employment",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /students",
+      "to": "table:student_employment",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/watcher/log",
+      "to": "table:student_employment",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /admin/watcher/run",
+      "to": "table:student_employment",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/review-queue",
+      "to": "table:student_employment",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/metrics",
+      "to": "table:student_employment",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /profile",
+      "to": "table:student_authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /profile",
+      "to": "table:student_authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /employment",
+      "to": "table:student_authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /employment",
+      "to": "table:student_authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /authorization",
+      "to": "table:student_authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /status",
+      "to": "table:student_authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /ask",
+      "to": "table:student_authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /news",
+      "to": "table:student_authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /alerts",
+      "to": "table:student_authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /deadlines",
+      "to": "table:student_authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /simulate",
+      "to": "table:student_authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /dso-email",
+      "to": "table:student_authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /authorizations",
+      "to": "table:student_authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /action-plan",
+      "to": "table:student_authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /documents",
+      "to": "table:student_authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /risk-model",
+      "to": "table:student_authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /filing-windows",
+      "to": "table:student_authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /scenarios",
+      "to": "table:student_authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /students",
+      "to": "table:student_authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/watcher/log",
+      "to": "table:student_authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /admin/watcher/run",
+      "to": "table:student_authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/review-queue",
+      "to": "table:student_authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/metrics",
+      "to": "table:student_authorizations",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /profile",
+      "to": "table:student_i983_submissions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /profile",
+      "to": "table:student_i983_submissions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /employment",
+      "to": "table:student_i983_submissions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /employment",
+      "to": "table:student_i983_submissions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /authorization",
+      "to": "table:student_i983_submissions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /status",
+      "to": "table:student_i983_submissions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /ask",
+      "to": "table:student_i983_submissions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /news",
+      "to": "table:student_i983_submissions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /alerts",
+      "to": "table:student_i983_submissions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /deadlines",
+      "to": "table:student_i983_submissions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /simulate",
+      "to": "table:student_i983_submissions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /dso-email",
+      "to": "table:student_i983_submissions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /authorizations",
+      "to": "table:student_i983_submissions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /action-plan",
+      "to": "table:student_i983_submissions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /documents",
+      "to": "table:student_i983_submissions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /risk-model",
+      "to": "table:student_i983_submissions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /filing-windows",
+      "to": "table:student_i983_submissions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /scenarios",
+      "to": "table:student_i983_submissions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /students",
+      "to": "table:student_i983_submissions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/watcher/log",
+      "to": "table:student_i983_submissions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /admin/watcher/run",
+      "to": "table:student_i983_submissions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/review-queue",
+      "to": "table:student_i983_submissions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/metrics",
+      "to": "table:student_i983_submissions",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /profile",
+      "to": "table:outbox_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /profile",
+      "to": "table:outbox_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /employment",
+      "to": "table:outbox_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /employment",
+      "to": "table:outbox_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /authorization",
+      "to": "table:outbox_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /status",
+      "to": "table:outbox_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /ask",
+      "to": "table:outbox_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /news",
+      "to": "table:outbox_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /alerts",
+      "to": "table:outbox_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /deadlines",
+      "to": "table:outbox_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /simulate",
+      "to": "table:outbox_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /dso-email",
+      "to": "table:outbox_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /authorizations",
+      "to": "table:outbox_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /action-plan",
+      "to": "table:outbox_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /documents",
+      "to": "table:outbox_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /risk-model",
+      "to": "table:outbox_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /filing-windows",
+      "to": "table:outbox_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /scenarios",
+      "to": "table:outbox_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /students",
+      "to": "table:outbox_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/watcher/log",
+      "to": "table:outbox_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /admin/watcher/run",
+      "to": "table:outbox_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/review-queue",
+      "to": "table:outbox_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/metrics",
+      "to": "table:outbox_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /profile",
+      "to": "table:audit_trail",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /profile",
+      "to": "table:audit_trail",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /employment",
+      "to": "table:audit_trail",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /employment",
+      "to": "table:audit_trail",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /authorization",
+      "to": "table:audit_trail",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /status",
+      "to": "table:audit_trail",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /ask",
+      "to": "table:audit_trail",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /news",
+      "to": "table:audit_trail",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /alerts",
+      "to": "table:audit_trail",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /deadlines",
+      "to": "table:audit_trail",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /simulate",
+      "to": "table:audit_trail",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /dso-email",
+      "to": "table:audit_trail",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /authorizations",
+      "to": "table:audit_trail",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /action-plan",
+      "to": "table:audit_trail",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /documents",
+      "to": "table:audit_trail",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /risk-model",
+      "to": "table:audit_trail",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /filing-windows",
+      "to": "table:audit_trail",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /scenarios",
+      "to": "table:audit_trail",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /students",
+      "to": "table:audit_trail",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/watcher/log",
+      "to": "table:audit_trail",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /admin/watcher/run",
+      "to": "table:audit_trail",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/review-queue",
+      "to": "table:audit_trail",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/metrics",
+      "to": "table:audit_trail",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /profile",
+      "to": "table:metrics",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /profile",
+      "to": "table:metrics",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /employment",
+      "to": "table:metrics",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /employment",
+      "to": "table:metrics",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /authorization",
+      "to": "table:metrics",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /status",
+      "to": "table:metrics",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /ask",
+      "to": "table:metrics",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /news",
+      "to": "table:metrics",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /alerts",
+      "to": "table:metrics",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /deadlines",
+      "to": "table:metrics",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /simulate",
+      "to": "table:metrics",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /dso-email",
+      "to": "table:metrics",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /authorizations",
+      "to": "table:metrics",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /action-plan",
+      "to": "table:metrics",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /documents",
+      "to": "table:metrics",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /risk-model",
+      "to": "table:metrics",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /filing-windows",
+      "to": "table:metrics",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /scenarios",
+      "to": "table:metrics",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /students",
+      "to": "table:metrics",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/watcher/log",
+      "to": "table:metrics",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /admin/watcher/run",
+      "to": "table:metrics",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/review-queue",
+      "to": "table:metrics",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/metrics",
+      "to": "table:metrics",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /profile",
+      "to": "table:compliance_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /profile",
+      "to": "table:compliance_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /employment",
+      "to": "table:compliance_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /employment",
+      "to": "table:compliance_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /authorization",
+      "to": "table:compliance_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /status",
+      "to": "table:compliance_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /ask",
+      "to": "table:compliance_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /news",
+      "to": "table:compliance_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /alerts",
+      "to": "table:compliance_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /deadlines",
+      "to": "table:compliance_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /simulate",
+      "to": "table:compliance_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /dso-email",
+      "to": "table:compliance_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /authorizations",
+      "to": "table:compliance_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /action-plan",
+      "to": "table:compliance_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /documents",
+      "to": "table:compliance_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /risk-model",
+      "to": "table:compliance_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /filing-windows",
+      "to": "table:compliance_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /scenarios",
+      "to": "table:compliance_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /students",
+      "to": "table:compliance_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/watcher/log",
+      "to": "table:compliance_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /admin/watcher/run",
+      "to": "table:compliance_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/review-queue",
+      "to": "table:compliance_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/metrics",
+      "to": "table:compliance_events",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /profile",
+      "to": "table:watcher_check_log",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /profile",
+      "to": "table:watcher_check_log",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /employment",
+      "to": "table:watcher_check_log",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /employment",
+      "to": "table:watcher_check_log",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /authorization",
+      "to": "table:watcher_check_log",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /status",
+      "to": "table:watcher_check_log",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /ask",
+      "to": "table:watcher_check_log",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /news",
+      "to": "table:watcher_check_log",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /alerts",
+      "to": "table:watcher_check_log",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /deadlines",
+      "to": "table:watcher_check_log",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /simulate",
+      "to": "table:watcher_check_log",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /dso-email",
+      "to": "table:watcher_check_log",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /authorizations",
+      "to": "table:watcher_check_log",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /action-plan",
+      "to": "table:watcher_check_log",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /documents",
+      "to": "table:watcher_check_log",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /risk-model",
+      "to": "table:watcher_check_log",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /filing-windows",
+      "to": "table:watcher_check_log",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /scenarios",
+      "to": "table:watcher_check_log",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /students",
+      "to": "table:watcher_check_log",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/watcher/log",
+      "to": "table:watcher_check_log",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /admin/watcher/run",
+      "to": "table:watcher_check_log",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/review-queue",
+      "to": "table:watcher_check_log",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/metrics",
+      "to": "table:watcher_check_log",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /profile",
+      "to": "table:source_snapshots",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /profile",
+      "to": "table:source_snapshots",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /employment",
+      "to": "table:source_snapshots",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /employment",
+      "to": "table:source_snapshots",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /authorization",
+      "to": "table:source_snapshots",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /status",
+      "to": "table:source_snapshots",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /ask",
+      "to": "table:source_snapshots",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /news",
+      "to": "table:source_snapshots",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /alerts",
+      "to": "table:source_snapshots",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /deadlines",
+      "to": "table:source_snapshots",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /simulate",
+      "to": "table:source_snapshots",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /dso-email",
+      "to": "table:source_snapshots",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /authorizations",
+      "to": "table:source_snapshots",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /action-plan",
+      "to": "table:source_snapshots",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /documents",
+      "to": "table:source_snapshots",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /risk-model",
+      "to": "table:source_snapshots",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /filing-windows",
+      "to": "table:source_snapshots",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /scenarios",
+      "to": "table:source_snapshots",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /students",
+      "to": "table:source_snapshots",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/watcher/log",
+      "to": "table:source_snapshots",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /admin/watcher/run",
+      "to": "table:source_snapshots",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/review-queue",
+      "to": "table:source_snapshots",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/metrics",
+      "to": "table:source_snapshots",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /profile",
+      "to": "table:rule_review_queue",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /profile",
+      "to": "table:rule_review_queue",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /employment",
+      "to": "table:rule_review_queue",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /employment",
+      "to": "table:rule_review_queue",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /authorization",
+      "to": "table:rule_review_queue",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /status",
+      "to": "table:rule_review_queue",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /ask",
+      "to": "table:rule_review_queue",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /news",
+      "to": "table:rule_review_queue",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /alerts",
+      "to": "table:rule_review_queue",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /deadlines",
+      "to": "table:rule_review_queue",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /simulate",
+      "to": "table:rule_review_queue",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /dso-email",
+      "to": "table:rule_review_queue",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /authorizations",
+      "to": "table:rule_review_queue",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /action-plan",
+      "to": "table:rule_review_queue",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /documents",
+      "to": "table:rule_review_queue",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /risk-model",
+      "to": "table:rule_review_queue",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /filing-windows",
+      "to": "table:rule_review_queue",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /scenarios",
+      "to": "table:rule_review_queue",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /students",
+      "to": "table:rule_review_queue",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/watcher/log",
+      "to": "table:rule_review_queue",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:POST /admin/watcher/run",
+      "to": "table:rule_review_queue",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/review-queue",
+      "to": "table:rule_review_queue",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    },
+    {
+      "from": "endpoint:GET /admin/metrics",
+      "to": "table:rule_review_queue",
+      "label": "queries",
+      "sourceFile": "src/api/routes.ts"
+    }
+  ]
+}
