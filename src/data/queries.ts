@@ -452,6 +452,17 @@ export function getMetricValues(name: string, limit = 500): number[] {
   return rows.map(r => r.value_ms);
 }
 
+/** Returns the N most recent samples in chronological order — for sparklines. */
+export function getRecentMetricSamples(name: string, limit = 30): number[] {
+  const rows = db.prepare(`
+    SELECT value_ms FROM (
+      SELECT value_ms, recorded_at FROM metrics WHERE name = ?
+      ORDER BY recorded_at DESC LIMIT ?
+    ) ORDER BY recorded_at ASC
+  `).all(name, limit) as Array<{ value_ms: number }>;
+  return rows.map(r => r.value_ms);
+}
+
 /** Outbox lag: ms between created_at and dispatched_at for dispatched events. */
 export function getOutboxLagValues(): { pendingCount: number; lagValues: number[] } {
   const { cnt } = db.prepare(

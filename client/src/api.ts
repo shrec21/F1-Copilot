@@ -616,6 +616,11 @@ export interface MetricsResponse {
   ruleEval: LatencyStat;
   askAgent: LatencyStat;
   dsoEmail: LatencyStat;
+  sparklines: {
+    ruleEval: number[];
+    askAgent: number[];
+    dsoEmail: number[];
+  };
   outbox: {
     pendingCount: number;
     avgLagMs: number | null;
@@ -629,6 +634,20 @@ export interface MetricsResponse {
     errorRate: number;
     lastRunAt: string | null;
   };
+  sources: Array<{
+    sourceId: string;
+    url: string;
+    checkedAt: string;
+    changed: boolean;
+  }>;
+  ruleDistribution: Array<{
+    ruleId: string;
+    pass: number;
+    warning: number;
+    violation: number;
+    notApplicable: number;
+    total: number;
+  }>;
 }
 
 export async function getMetrics(): Promise<MetricsResponse> {

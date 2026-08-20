@@ -33,6 +33,7 @@ import {
   getAuditTrailForStudent,
   insertMetric,
   getMetricValues,
+  getRecentMetricSamples,
   getOutboxLagValues,
 } from '../data/queries';
 import { evaluateAllRules } from '@f1/rule-engine';
@@ -45,6 +46,7 @@ import {
   getCheckLogs,
   getAllReviewTickets,
   resolveReviewTicket,
+  getLatestSourceSnapshots,
 } from '../watcher/queries';
 import { runCheckCycle } from '../watcher/checker';
 import type { ReviewStatus } from '../watcher/queries';
@@ -633,6 +635,13 @@ export function registerRoutes(fastify: FastifyInstance): void {
     const dsoEmailValues  = getMetricValues('dso_email');
     const { pendingCount, lagValues } = getOutboxLagValues();
 
+    // Sparklines — chronological samples for trend visualization
+    const sparklines = {
+      ruleEval: getRecentMetricSamples('rule_eval', 30),
+      askAgent: getRecentMetricSamples('ask_agent', 30),
+      dsoEmail: getRecentMetricSamples('dso_email', 30),
+    };
+
     // Watcher run durations from existing check log
     const watcherLogs = getCheckLogs(200);
     const completedRuns = watcherLogs.filter(l => l.finishedAt !== null);
@@ -640,6 +649,33 @@ export function registerRoutes(fastify: FastifyInstance): void {
       .map(l => new Date(l.finishedAt!).getTime() - new Date(l.startedAt).getTime())
       .sort((a, b) => a - b);
     const errorCount = watcherLogs.filter(l => l.error !== null).length;
+
+    // Per-source last-check status
+    const sources = getLatestSourceSnapshots();
+
+    // Rule violation distribution across synthetic cohort
+    const students = getAllStudents();
+    const todayIso = new Date().toISOString().slice(0, 10);
+    const ruleDistMap = new Map<string, { pass: number; warning: number; violation: number; notApplicable: number }>();
+    for (const student of students) {
+      const ctx = getRuleContextForStudent(student.id);
+      const results = evaluateAllRules(student, ctx, todayIso);
+      for (const r of results) {
+        if (!ruleDistMap.has(r.rule.id)) {
+          ruleDistMap.set(r.rule.id, { pass: 0, warning: 0, violation: 0, notApplicable: 0 });
+        }
+        const entry = ruleDistMap.get(r.rule.id)!;
+        if (r.status === 'pass') entry.pass++;
+        else if (r.status === 'warning') entry.warning++;
+        else if (r.status === 'violation') entry.violation++;
+        else entry.notApplicable++;
+      }
+    }
+    const ruleDistribution = Array.from(ruleDistMap.entries()).map(([ruleId, counts]) => ({
+      ruleId,
+      ...counts,
+      total: counts.pass + counts.warning + counts.violation + counts.notApplicable,
+    }));
 
     const avgMs = (arr: number[]): number | null =>
       arr.length === 0 ? null : Math.round(arr.reduce((s, v) => s + v, 0) / arr.length * 10) / 10;
@@ -660,6 +696,7 @@ export function registerRoutes(fastify: FastifyInstance): void {
         p95Ms: percentile(dsoEmailValues, 95),
         count: dsoEmailValues.length,
       },
+      sparklines,
       outbox: {
         pendingCount,
         avgLagMs: avgMs(lagValues),
@@ -675,6 +712,8 @@ export function registerRoutes(fastify: FastifyInstance): void {
           : 0,
         lastRunAt: watcherLogs[0]?.startedAt ?? null,
       },
+      sources,
+      ruleDistribution,
     });
   });
 

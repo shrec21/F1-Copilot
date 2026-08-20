@@ -89,6 +89,26 @@ export function insertSourceSnapshot(snap: {
   );
 }
 
+/** Returns the most recent snapshot for every source — for the observability source table. */
+export function getLatestSourceSnapshots(): Array<{
+  sourceId: string;
+  url: string;
+  checkedAt: string;
+  changed: boolean;
+}> {
+  const rows = db.prepare(`
+    SELECT s.source_id AS sourceId, s.url, s.checked_at AS checkedAt, s.changed
+    FROM source_snapshots s
+    INNER JOIN (
+      SELECT source_id, MAX(checked_at) AS max_checked
+      FROM source_snapshots
+      GROUP BY source_id
+    ) latest ON s.source_id = latest.source_id AND s.checked_at = latest.max_checked
+    ORDER BY s.source_id
+  `).all() as Array<{ sourceId: string; url: string; checkedAt: string; changed: number }>;
+  return rows.map(r => ({ ...r, changed: r.changed === 1 }));
+}
+
 /** Returns the most recent snapshot for a source, or null on first run (bootstrap). */
 export function getLastSnapshot(sourceId: string): {
   contentHash: string;
