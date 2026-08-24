@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getDeadlines, type Deadline } from '../api';
+import { getDeadlines, getDeadlinesIcalUrl, type Deadline } from '../api';
 
 const SEVERITY_STYLES: Record<Deadline['severity'], { card: string; counter: string; label: string }> = {
   critical: { card: 'border-red-300 bg-red-50', counter: 'text-red-700', label: 'bg-red-100 text-red-700' },
@@ -41,9 +41,25 @@ export function DeadlineCountdown() {
 
   if (deadlines.length === 0) return null;
 
+  const hasActiveDeadlines = deadlines.some(d => d.severity !== 'past');
+
   return (
     <div className="mb-6">
-      <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3">Upcoming Deadlines</h2>
+      <div className="flex items-center justify-between mb-3">
+        <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Upcoming Deadlines</h2>
+        {hasActiveDeadlines && (
+          <a
+            href={getDeadlinesIcalUrl()}
+            download="f1-deadlines.ics"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-md hover:bg-blue-100 transition-colors"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5">
+              <path fillRule="evenodd" d="M5.75 2a.75.75 0 0 1 .75.75V4h7V2.75a.75.75 0 0 1 1.5 0V4h.25A2.75 2.75 0 0 1 18 6.75v8.5A2.75 2.75 0 0 1 15.25 18H4.75A2.75 2.75 0 0 1 2 15.25v-8.5A2.75 2.75 0 0 1 4.75 4H5V2.75A.75.75 0 0 1 5.75 2Zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75Z" clipRule="evenodd" />
+            </svg>
+            Export to Calendar
+          </a>
+        )}
+      </div>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         {deadlines.map((d) => (
           <DeadlineCard key={d.id} deadline={d} />
