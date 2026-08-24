@@ -261,6 +261,10 @@ export async function getAlerts(): Promise<Alert[]> {
   return res.json();
 }
 
+export function getDeadlinesIcalUrl(): string {
+  return `${BASE}/deadlines/export.ics`;
+}
+
 export async function getDeadlines(): Promise<Deadline[]> {
   const res = await fetch(`${BASE}/deadlines`);
   if (res.status === 404) return [];

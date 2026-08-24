@@ -8,6 +8,7 @@ import { checkConcurrentEmploymentConflicts } from '../engine/concurrent-employm
 import { checkDsTransitionStatus } from '../engine/ds-transition';
 import { computeAlerts } from '../engine/alert-engine';
 import { computeDeadlines } from '../engine/deadline-engine';
+import { generateIcal } from '../engine/ical-engine';
 import { computeActionPlan } from '../engine/action-plan-engine';
 import { DOCUMENT_LIST } from '../engine/document-checklist-engine';
 import { SCENARIOS, detectScenario } from '../engine/scenario-engine';
@@ -337,6 +338,23 @@ export function registerRoutes(fastify: FastifyInstance): void {
     const todayIso = new Date().toISOString().slice(0, 10);
     const deadlines = computeDeadlines(unemployment, dsStatus, profile.programEndDate, todayIso);
     return reply.send(deadlines);
+  });
+
+  // GET /deadlines/export.ics — download deadlines as iCal file
+  fastify.get('/deadlines/export.ics', async (_request, reply) => {
+    const profile = getUserProfile();
+    if (!profile) return reply.status(404).send({ error: 'Profile not set. POST /profile first.' });
+
+    const roles = getAllEmploymentPeriods();
+    const { unemployment, dsStatus } = computeFullStatus(profile, roles);
+    const todayIso = new Date().toISOString().slice(0, 10);
+    const deadlines = computeDeadlines(unemployment, dsStatus, profile.programEndDate, todayIso);
+    const ical = generateIcal(deadlines, todayIso);
+
+    return reply
+      .header('Content-Type', 'text/calendar; charset=utf-8')
+      .header('Content-Disposition', 'attachment; filename="f1-deadlines.ics"')
+      .send(ical);
   });
 
   // POST /simulate — run engine with hypothetical roles (no DB write)
